@@ -28,6 +28,13 @@ Convention : chaque tâche est une carte à créer sur le board (Jira/Trello/Git
 - [ ] `.env.example` documenté (DB_URL, JWT_SECRET, CLAUDE_API_KEY, PORT)
 - [ ] README avec instructions de setup local (créer la base Postgres, renseigner `DATABASE_URL` dans `.env`, `npm install`, `npx prisma migrate dev`, `npm run dev`)
 
+### Outillage repo [Lead / Scrum Master]
+- [ ] `.gitignore` racine (node_modules, `.env`, dist/build, fichiers OS/IDE)
+- [ ] Config Prettier (`.prettierrc.json`, `.prettierignore`) partagée entre `apps/web` et `apps/api`
+- [ ] `eslint-config-prettier` ajouté aux deux workspaces pour éviter les conflits ESLint/Prettier
+- [ ] Husky + lint-staged installés à la racine (`npm run prepare`) : hook `pre-commit` qui lance ESLint (`--fix`) et Prettier (`--write`) uniquement sur les fichiers indexés
+- [ ] Test du hook : un commit avec du code mal formaté doit être automatiquement corrigé ou bloqué si erreur de lint
+
 ### Frontend — FE1 : Design system & composants de base
 - [ ] Initialiser le projet React avec Vite dans `apps/web`
 - [ ] Configurer Tailwind + shadcn/ui

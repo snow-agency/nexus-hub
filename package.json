@@ -4,18 +4,37 @@
   "version": "0.1.0",
   "description": "Nexus Hub — monorepo (Frontend React + Backend Node.js/Express)",
   "workspaces": [
-    "Frontend",
-    "Backend"
+    "apps/web",
+    "apps/api"
   ],
   "scripts": {
-    "dev:frontend": "npm run dev --workspace=Frontend",
-    "dev:backend": "npm run dev --workspace=Backend",
+    "dev:frontend": "npm run dev --workspace=apps/web",
+    "dev:backend": "npm run dev --workspace=apps/api",
     "dev": "concurrently -n FRONT,BACK -c blue,green \"npm:dev:frontend\" \"npm:dev:backend\"",
-    "build": "npm run build --workspace=Backend && npm run build --workspace=Frontend",
-    "lint": "npm run lint --workspace=Frontend && npm run lint --workspace=Backend"
+    "build": "npm run build --workspace=apps/api && npm run build --workspace=apps/web",
+    "lint": "npm run lint --workspace=apps/web && npm run lint --workspace=apps/api",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "prepare": "husky"
+  },
+  "lint-staged": {
+    "apps/web/**/*.{ts,tsx,js,jsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "apps/api/**/*.{ts,js}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{json,md,yml,yaml}": [
+      "prettier --write"
+    ]
   },
   "devDependencies": {
-    "concurrently": "^8.2.2"
+    "concurrently": "^8.2.2",
+    "husky": "^9.1.6",
+    "lint-staged": "^15.2.10",
+    "prettier": "^3.3.3"
   },
   "engines": {
     "node": ">=20"
