@@ -3,8 +3,7 @@ import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import morgan from 'morgan';
-import authRoutes from './modules/auth/auth.routes';
-
+import authRoutes from './modules/auth/auth.routes.js';
 const app = express();
 const port = process.env.PORT ? Number(process.env.PORT) : 3001;
 
