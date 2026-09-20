@@ -1,42 +1,33 @@
 {
   "name": "nexus-hub",
   "private": true,
-  "version": "0.1.0",
-  "description": "Nexus Hub — monorepo (Frontend React + Backend Node.js/Express)",
-  "workspaces": [
-    "apps/web",
-    "apps/api"
-  ],
+  "version": "0.0.0",
+  "type": "module",
   "scripts": {
-    "dev:frontend": "npm run dev --workspace=apps/web",
-    "dev:backend": "npm run dev --workspace=apps/api",
-    "dev": "concurrently -n FRONT,BACK -c blue,green \"npm:dev:frontend\" \"npm:dev:backend\"",
-    "build": "npm run build --workspace=apps/api && npm run build --workspace=apps/web",
-    "lint": "npm run lint --workspace=apps/web && npm run lint --workspace=apps/api",
-    "format": "prettier --write .",
-    "format:check": "prettier --check .",
-    "prepare": "husky"
+    "dev": "vite",
+    "build": "vite build",
+    "lint": "eslint .",
+    "preview": "vite preview"
   },
-  "lint-staged": {
-    "apps/web/**/*.{ts,tsx,js,jsx}": [
-      "eslint --config apps/web/eslint.config.js --fix",
-      "prettier --write"
-    ],
-    "apps/api/**/*.{ts,js}": [
-      "eslint --config apps/api/eslint.config.js --fix",
-      "prettier --write"
-    ],
-    "*.{json,md,yml,yaml}": [
-      "prettier --write"
-    ]
+  "dependencies": {
+    "classnames": "^2.5.1",
+    "lucide-react": "^1.47.0",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8"
   },
   "devDependencies": {
-    "concurrently": "^8.2.2",
-    "husky": "^9.1.6",
-    "lint-staged": "^15.2.10",
-    "prettier": "^3.3.3"
-  },
-  "engines": {
-    "node": ">=20"
+    "@eslint/js": "^10.0.1",
+    "@tailwindcss/vite": "^4.3.3",
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.7",
+    "@vitejs/plugin-react": "^6.1.1",
+    "autoprefixer": "^10.6.1",
+    "eslint": "^10.10.0",
+    "eslint-plugin-react-hooks": "^7.1.1",
+    "eslint-plugin-react-refresh": "^0.5.6",
+    "globals": "^17.12.0",
+    "postcss": "^8.5.28",
+    "tailwindcss": "^4.3.3",
+    "vite": "^8.3.0"
   }
 }
