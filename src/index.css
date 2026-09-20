@@ -1,9 +1,11 @@
 @import "tailwindcss";
 
 @theme {
-  --color-primary: #1e40af;
-  --color-primary-hover: #1d4ed8;
-  --color-secondary: #64748b;
-  --color-accent: #0284c7;
+  --color-primary: #005C46;         /* Vert principal (boutons principaux, headers) */
+  --color-primary-hover: #004736;   /* Vert foncé au survol */
+  --color-accent: #FFB800;          /* Jaune/Orange d'accentuation */
+  --color-accent-hover: #E0A200;    /* Jaune au survol */
+  --color-bg-light: #F7F5F0;        /* Fond beige clair de l'application */
+  --color-dark: #18181B;            /* Dark/Footer */
   --font-sans: 'Inter', system-ui, sans-serif;
 }
