@@ -1,8 +1,10 @@
 import { Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
+import { Prisma } from '@prisma/client';
 import { prisma } from '../../db/prisma.js';
 import { registerSchema, loginSchema } from './auth.schema.js';
+import { JWT_SECRET } from '../../config/env.js';
 
 export async function register(req: Request, res: Response) {
   const result = registerSchema.safeParse(req.body);
@@ -12,19 +14,20 @@ export async function register(req: Request, res: Response) {
   }
 
   const { email, password, name } = result.data;
-
-  const existing = await prisma.user.findUnique({ where: { email } });
-  if (existing) {
-    return res.status(400).json({ error: 'Cet email est déjà utilisé.' });
-  }
-
   const passwordHash = await bcrypt.hash(password, 10);
 
-  const user = await prisma.user.create({
-    data: { email, passwordHash, name },
-  });
+  try {
+    const user = await prisma.user.create({
+      data: { email, passwordHash, name },
+    });
 
-  res.status(201).json({ id: user.id, email: user.email, name: user.name });
+    res.status(201).json({ id: user.id, email: user.email, name: user.name });
+  } catch (err) {
+    if (err instanceof Prisma.PrismaClientKnownRequestError && err.code === 'P2002') {
+      return res.status(400).json({ error: 'Cet email est déjà utilisé.' });
+    }
+    throw err;
+  }
 }
 
 export async function login(req: Request, res: Response) {
@@ -46,9 +49,7 @@ export async function login(req: Request, res: Response) {
     return res.status(401).json({ error: 'Email ou mot de passe incorrect.' });
   }
 
-  const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET as string, {
-    expiresIn: '7d',
-  });
+  const token = jwt.sign({ userId: user.id }, JWT_SECRET, { expiresIn: '7d' });
 
   res.json({
     token,
