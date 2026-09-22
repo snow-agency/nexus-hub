@@ -8,6 +8,7 @@ import projectRoutes from './modules/project/project.routes.js';
 import { errorHandler } from './middlewares/error-handler.js';
 import onboardingRoutes from './modules/onboarding/onboarding.routes.js';
 import taskRoutes from './modules/task/task.routes.js';
+import financeRoutes from './modules/finance/finance.routes.js';
 
 const app = express();
 const port = process.env.PORT ? Number(process.env.PORT) : 3001;
@@ -25,6 +26,7 @@ app.use('/auth', authRoutes);
 app.use('/projects', projectRoutes);
 app.use('/onboarding', onboardingRoutes);
 app.use('/tasks', taskRoutes);
+app.use('/finance', financeRoutes);
 app.use(errorHandler);
 
 app.listen(port, () => {
