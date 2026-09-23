@@ -1,6 +1,8 @@
 import { Response } from 'express';
 import { prisma } from '../../db/prisma.js';
 import { AuthRequest } from '../../middlewares/auth.middleware.js';
+import { runDetection } from '../rules-engine/rules-engine.service.js';
+import { pickPrioritySignal } from '../rules-engine/arbitration.js';
 
 export async function getDashboard(req: AuthRequest, res: Response) {
   const { projectId } = req.params;
@@ -25,6 +27,9 @@ export async function getDashboard(req: AuthRequest, res: Response) {
   const budgetTotal = Number(project.budgetTotal);
   const budgetRestant = budgetTotal - totalDepenses;
 
+  const signaux = await runDetection(projectId);
+  const signalPrioritaire = pickPrioritySignal(signaux);
+
   res.json({
     project: {
       id: project.id,
@@ -41,7 +46,8 @@ export async function getDashboard(req: AuthRequest, res: Response) {
       totalDepenses,
       budgetRestant,
     },
-    signaux: [],
+    signaux,
+    signalPrioritaire,
     nextAction: null,
   });
 }
