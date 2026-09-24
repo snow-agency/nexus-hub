@@ -7,6 +7,7 @@ import authRoutes from './modules/auth/auth.routes.js';
 import projectRoutes from './modules/project/project.routes.js';
 import { errorHandler } from './middlewares/error-handler.js';
 import onboardingRoutes from './modules/onboarding/onboarding.routes.js';
+import taskRoutes from './modules/task/task.routes.js';
 
 const app = express();
 const port = process.env.PORT ? Number(process.env.PORT) : 3001;
@@ -23,6 +24,7 @@ app.get('/health', (_req, res) => {
 app.use('/auth', authRoutes);
 app.use('/projects', projectRoutes);
 app.use('/onboarding', onboardingRoutes);
+app.use('/tasks', taskRoutes);
 app.use(errorHandler);
 
 app.listen(port, () => {
