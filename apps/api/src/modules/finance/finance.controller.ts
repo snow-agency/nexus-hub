@@ -1,6 +1,7 @@
 import { Response } from 'express';
 import { prisma } from '../../db/prisma.js';
 import { createTransactionSchema } from './finance.schema.js';
+import { computeFinanceSummary } from './finance.utils.js';
 import { AuthRequest } from '../../middlewares/auth.middleware.js';
 
 export async function createTransaction(req: AuthRequest, res: Response) {
@@ -49,20 +50,8 @@ export async function listTransactions(req: AuthRequest, res: Response) {
     orderBy: { date: 'desc' },
   });
 
-  const totalDepenses = transactions
-    .filter((t) => t.type === 'DEPENSE')
-    .reduce((sum, t) => sum + Number(t.amount), 0);
-
-  const totalRevenus = transactions
-    .filter((t) => t.type === 'REVENU')
-    .reduce((sum, t) => sum + Number(t.amount), 0);
-
   res.json({
     transactions,
-    solde: totalRevenus - totalDepenses,
-    totalDepenses,
-    totalRevenus,
-    budgetTotal: Number(project.budgetTotal),
-    budgetRestant: Number(project.budgetTotal) - totalDepenses,
+    ...computeFinanceSummary(transactions, Number(project.budgetTotal)),
   });
 }
