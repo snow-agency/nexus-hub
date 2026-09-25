@@ -1,24 +1,43 @@
+# Dependencies
+node_modules/
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+!.env.example
+
+# Build outputs
+dist/
+build/
+apps/web/dist/
+apps/api/dist/
+apps/web/.vite/
+
+# Prisma
+apps/api/prisma/*.db
+apps/api/prisma/*.db-journal
+
 # Logs
-logs
 *.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-pnpm-debug.log*
-lerna-debug.log*
 
-node_modules
-dist
-dist-ssr
-*.local
+# Testing / coverage
+coverage/
 
-# Editor directories and files
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
 .vscode/*
 !.vscode/extensions.json
-.idea
-.DS_Store
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
-*.sw?
+.idea/
+
+# Misc
+*.local
+
+# Other
+Doc/
