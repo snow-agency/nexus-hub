@@ -15,7 +15,7 @@
     "lint": "npm run lint --workspace=apps/web && npm run lint --workspace=apps/api",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "prepare": "husky"
+    "prepare": "husky || true"
   },
   "lint-staged": {
     "apps/web/**/*.{ts,tsx,js,jsx}": [
