@@ -1,12 +1,12 @@
-import { ProjectPhase } from '@prisma/client';
+import type { ProjectPhase } from '@prisma/client';
 
 export function detectPhase(stage: 'idee' | 'lancement' | 'croissance'): ProjectPhase {
   switch (stage) {
     case 'idee':
-      return ProjectPhase.IDEE_VALIDATION;
+      return 'IDEE_VALIDATION';
     case 'lancement':
-      return ProjectPhase.LANCEMENT;
+      return 'LANCEMENT';
     case 'croissance':
-      return ProjectPhase.CROISSANCE;
+      return 'CROISSANCE';
   }
 }

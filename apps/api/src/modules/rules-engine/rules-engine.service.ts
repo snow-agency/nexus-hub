@@ -1,7 +1,6 @@
 import { prisma } from '../../db/prisma.js';
 import { SignalType, SignalSeverity } from '@prisma/client';
-
-const BUDGET_THRESHOLD = 0.8; // 80 % du budget consommé déclenche le signal
+import { isBudgetDepasse } from './detection.js';
 
 async function upsertSignal(projectId: string, type: SignalType, severity: SignalSeverity) {
   const existing = await prisma.signal.findFirst({
@@ -33,10 +32,8 @@ async function checkBudgetDepasse(projectId: string) {
   });
   const totalDepenses = transactions.reduce((sum, t) => sum + Number(t.amount), 0);
   const budgetTotal = Number(project.budgetTotal);
-  const seuil = budgetTotal * BUDGET_THRESHOLD;
-  const depasse = budgetTotal === 0 ? totalDepenses > 0 : totalDepenses >= seuil;
 
-  if (depasse) {
+  if (isBudgetDepasse(totalDepenses, budgetTotal)) {
     await upsertSignal(projectId, 'BUDGET_DEPASSE', 'HAUTE');
   } else {
     await resolveSignal(projectId, 'BUDGET_DEPASSE');
