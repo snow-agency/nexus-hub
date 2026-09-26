@@ -30,6 +30,13 @@
       "prettier --write"
     ]
   },
+  "dependencies": {
+    "classnames": "^2.5.1",
+    "lucide-react": "^1.47.0",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
+    "react-router-dom": "^7.18.4"
+  },
   "devDependencies": {
     "concurrently": "^8.2.2",
     "husky": "^9.1.6",
