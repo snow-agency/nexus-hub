@@ -1,13 +1,25 @@
 import { useState } from 'react'
 import { ArrowLeft, ArrowRight, LockKeyhole, Mail, Sparkles } from 'lucide-react'
+import { useLocation, useNavigate } from 'react-router-dom'
+
+const AUTH_STORAGE_KEY = 'nexusHubAuthenticated'
 
 export default function LoginPage() {
+  const navigate = useNavigate()
+  const location = useLocation()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [rememberMe, setRememberMe] = useState(false)
 
   function handleSubmit(event) {
     event.preventDefault()
+
+    const storage = rememberMe ? window.localStorage : window.sessionStorage
+    const otherStorage = rememberMe ? window.sessionStorage : window.localStorage
+    storage.setItem(AUTH_STORAGE_KEY, 'true')
+    otherStorage.removeItem(AUTH_STORAGE_KEY)
+
+    navigate(location.state?.from?.pathname || '/dashboard', { replace: true })
   }
 
   return (
