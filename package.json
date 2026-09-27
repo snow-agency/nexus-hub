@@ -2,7 +2,7 @@
   "name": "nexus-hub",
   "private": true,
   "version": "0.1.0",
-  "description": "Nexus Hub — monorepo (Frontend React + Backend Node.js/Express)",
+  "description": "Nexus Hub — monorepo (Frontend JavaScript + Backend Node.js/Express)",
   "workspaces": [
     "apps/web",
     "apps/api"
@@ -18,7 +18,7 @@
     "prepare": "husky || true"
   },
   "lint-staged": {
-    "apps/web/**/*.{ts,tsx,js,jsx}": [
+    "apps/web/**/*.js": [
       "eslint --config apps/web/eslint.config.js --fix",
       "prettier --write"
     ],
