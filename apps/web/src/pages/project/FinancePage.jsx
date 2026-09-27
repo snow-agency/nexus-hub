@@ -230,7 +230,7 @@ export function FinancePage() {
               </div>
             </Card>
 
-            {/* Répartition (Donut) */}
+            {/* Répartition */}
             <Card className="lg:col-span-4 p-6 bg-white border border-gray-200/60 rounded-3xl shadow-sm space-y-5">
               <h3 className="font-extrabold text-sm text-gray-900">Répartition</h3>
 
