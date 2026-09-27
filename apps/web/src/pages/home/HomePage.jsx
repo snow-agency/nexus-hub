@@ -1,3 +1,5 @@
+import { createElement } from 'react'
+import { Link } from 'react-router-dom'
 import { Button } from '../../components/ui/Button.jsx'
 import { Card } from '../../components/ui/Card.jsx'
 import {
@@ -52,9 +54,9 @@ export function HomePage() {
           <a href="/auth" className="text-sm font-medium text-gray-700 hover:text-black px-3 py-2">
             Se connecter
           </a>
-          <Button className="bg-[#FFB800] text-black hover:bg-[#E0A200] font-semibold text-sm px-5 py-2 rounded-lg">
+          <Link to="/register" className="rounded-lg bg-[#FFB800] px-5 py-2 text-sm font-semibold text-black transition-colors hover:bg-[#E0A200]">
             S'inscrire
-          </Button>
+          </Link>
         </div>
       </header>
 
@@ -207,7 +209,7 @@ export function HomePage() {
             {spaces.map(({ icon: Icon, title, description }) => (
               <Card key={title} className="rounded-lg border border-gray-200/80 bg-white p-4 transition-shadow hover:shadow-sm md:p-5">
                 <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-emerald-50 text-[#005C46]">
-                  <Icon size={18} />
+                  {createElement(Icon, { size: 18 })}
                 </span>
                 <h3 className="mt-3 text-sm font-semibold text-gray-900">{title}</h3>
                 <p className="mt-1 text-xs leading-relaxed text-gray-600">{description}</p>

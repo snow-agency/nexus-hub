@@ -1,6 +1,6 @@
 import { Card } from '../../components/ui/Card';
 import { Button } from '../../components/ui/Button';
-import { Link, useNavigate } from 'react-router-dom';
+import { AppSidebar } from '../../components/layout/AppSidebar.jsx';
 import { 
   LayoutDashboard, 
   Briefcase, 
@@ -12,96 +12,15 @@ import {
   Globe, 
   Bell, 
   Check, 
-  MessageCircle, 
   ChevronRight,
-  LogOut
 } from 'lucide-react';
 
 export function DashboardPage() {
-  const navigate = useNavigate();
-
-  function handleLogout() {
-    window.localStorage.removeItem('nexusHubAuthenticated');
-    window.sessionStorage.removeItem('nexusHubAuthenticated');
-    navigate('/auth', { replace: true });
-  }
-
   return (
     <div className="min-h-screen bg-[#F7F5F0] flex text-gray-900 font-sans p-4 md:p-6">
       <div className="max-w-[1440px] mx-auto w-full flex gap-6">
         
-        {/* SIDEBAR D'APPLI */}
-        <aside className="w-64 flex-shrink-0 flex flex-col justify-between hidden lg:flex border-r border-gray-300/70 pr-6">
-          <div className="space-y-6">
-            {/* Logo & Subtitle */}
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full bg-[#18181B] text-white flex items-center justify-center font-bold text-base">
-                N
-              </div>
-              <div>
-                <h1 className="font-extrabold text-base leading-tight text-gray-900">Nexus Hub</h1>
-                <p className="text-[11px] text-gray-500">Votre cap entrepreneurial</p>
-              </div>
-            </div>
-
-            {/* Card Projet Actif */}
-            <div className="space-y-1 pt-2">
-              <p className="text-[11px] text-gray-400 font-medium">Projet actif</p>
-              <h2 className="font-extrabold text-lg text-gray-900 leading-tight">MomoFood</h2>
-              <p className="text-xs text-gray-500">Resto-livraison · Lomé</p>
-              <div className="pt-2">
-                <span className="inline-block px-3 py-1 rounded-full bg-[#E6F4EA] text-[#005C46] text-[11px] font-semibold">
-                  Phase · Lancement
-                </span>
-              </div>
-            </div>
-
-            {/* Navigation */}
-            <nav className="space-y-1 pt-2">
-              <Link to="/dashboard" className="flex items-center gap-3 px-4 py-2.5 rounded-full bg-[#18181B] text-white font-semibold text-sm">
-                <LayoutDashboard size={18} />
-                <span>Vue d'ensemble</span>
-              </Link>
-              <Link to="/project" className="flex items-center gap-3 px-4 py-2.5 rounded-full text-gray-600 hover:bg-black/5 text-sm font-medium transition-colors">
-                <Briefcase size={18} />
-                <span>Mon projet</span>
-              </Link>
-              <a href="#" className="flex items-center gap-3 px-4 py-2.5 rounded-full text-gray-600 hover:bg-black/5 text-sm font-medium transition-colors">
-                <Layers size={18} />
-                <span>Organisation</span>
-              </a>
-              <a href="#" className="flex items-center gap-3 px-4 py-2.5 rounded-full text-gray-600 hover:bg-black/5 text-sm font-medium transition-colors">
-                <Coins size={18} />
-                <span>Finance</span>
-              </a>
-              <a href="#" className="flex items-center gap-3 px-4 py-2.5 rounded-full text-gray-600 hover:bg-black/5 text-sm font-medium transition-colors">
-                <Target size={18} />
-                <span>Stratégie</span>
-              </a>
-              <a href="#" className="flex items-center gap-3 px-4 py-2.5 rounded-full text-gray-600 hover:bg-black/5 text-sm font-medium transition-colors">
-                <Users size={18} />
-                <span>Équipe</span>
-              </a>
-              <a href="#" className="flex items-center gap-3 px-4 py-2.5 rounded-full text-gray-600 hover:bg-black/5 text-sm font-medium transition-colors">
-                <TrendingUp size={18} />
-                <span>Performance</span>
-              </a>
-              <a href="#" className="flex items-center gap-3 px-4 py-2.5 rounded-full text-gray-600 hover:bg-black/5 text-sm font-medium transition-colors">
-                <Globe size={18} />
-                <span>Réseau</span>
-              </a>
-            </nav>
-          </div>
-
-          {/* Copilote Box */}
-          <div className="bg-[#18181B] text-white p-5 rounded-2xl space-y-3">
-            <p className="text-[11px] text-gray-400">Besoin d'un éclairage ?</p>
-            <p className="font-extrabold text-sm leading-snug">Demandez à votre copilote.</p>
-            <Button className="w-full bg-[#FFB800] hover:bg-[#E0A200] text-black font-bold text-xs py-2.5 rounded-xl flex items-center justify-center gap-2">
-              <MessageCircle size={15} /> Discuter
-            </Button>
-          </div>
-        </aside>
+        <AppSidebar activePage="dashboard" />
 
         {/* CONTENU PRINCIPAL */}
         <main className="flex-1 space-y-6 overflow-y-auto">
@@ -121,15 +40,6 @@ export function DashboardPage() {
             <div className="w-8 h-8 rounded-full overflow-hidden border border-gray-200">
               <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=150" alt="Avatar" className="w-full h-full object-cover" />
             </div>
-            <button
-              type="button"
-              aria-label="Se déconnecter"
-              onClick={handleLogout}
-              className="inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-semibold text-gray-700 hover:bg-black/5"
-            >
-              <LogOut size={15} />
-              Déconnexion
-            </button>
           </header>
 
           {/* HERO DIAGNOSTIC & ACTION VERTE */}

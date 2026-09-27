@@ -1,6 +1,6 @@
 import { useState } from 'react'
-import { ArrowLeft, ArrowRight, LockKeyhole, Mail, Sparkles } from 'lucide-react'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { ArrowRight, LockKeyhole, Mail, Sparkles } from 'lucide-react'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 
 const AUTH_STORAGE_KEY = 'nexusHubAuthenticated'
 
@@ -32,17 +32,12 @@ export default function LoginPage() {
             </span>
             <span className="text-sm font-semibold">Nexus Hub</span>
           </a>
-          <a className="inline-flex items-center gap-1 text-xs text-gray-600 transition-colors hover:text-[#005C46]" href="/">
-            <ArrowLeft aria-hidden="true" size={14} />
-            <span className="hidden sm:inline">Retour à l’accueil</span>
-            <span className="sm:hidden">Accueil</span>
-          </a>
         </div>
         <p className="text-xs text-gray-600">
           Pas encore de compte?{' '}
-          <a className="font-semibold text-[#C47B00] hover:underline" href="#inscription">
+          <Link className="font-semibold text-[#C47B00] hover:underline" to="/register">
             Créer un compte
-          </a>
+          </Link>
         </p>
       </header>
 
