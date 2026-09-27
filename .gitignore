@@ -11,6 +11,7 @@ node_modules_broken/
 # Build outputs
 dist/
 build/
+dist-ssr/
 apps/web/dist/
 apps/api/dist/
 apps/web/.vite/
@@ -36,6 +37,11 @@ Thumbs.db
 .vscode/*
 !.vscode/extensions.json
 .idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
 
 # Misc
 *.local

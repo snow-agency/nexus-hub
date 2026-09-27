@@ -1,8 +1,8 @@
 /** @type {import('tailwindcss').Config} */
-import { colors, fontFamily } from './src/theme/tokens.js';
+import { colors, fontFamily } from '../../src/theme/tokens.js';
 
 export default {
-  content: ['./index.html', './src/**/*.js'],
+  content: ['./index.html', './main.jsx', '../../src/**/*.{js,jsx}'],
   theme: {
     extend: {
       colors,

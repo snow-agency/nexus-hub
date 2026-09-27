@@ -18,7 +18,7 @@
     "prepare": "husky || true"
   },
   "lint-staged": {
-    "apps/web/**/*.js": [
+    "{apps/web,src}/**/*.{js,jsx}": [
       "eslint --config apps/web/eslint.config.js --fix",
       "prettier --write"
     ],
