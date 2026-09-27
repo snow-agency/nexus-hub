@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { AppSidebar } from '../../components/layout/AppSidebar.jsx';
 import { Card } from '../../components/ui/Card';
 import { Button } from '../../components/ui/Button';
@@ -9,7 +9,23 @@ import {
 } from 'lucide-react';
 
 export function OrganizationPage() {
-  const [filter, setFilter] = useState('Toutes');
+  const [searchParams, setSearchParams] = useSearchParams();
+  const filterByParam = {
+    todo: 'À faire',
+    'in-progress': 'En cours',
+    done: 'Terminé',
+  };
+  const paramByFilter = {
+    'À faire': 'todo',
+    'En cours': 'in-progress',
+    'Terminé': 'done',
+  };
+  const filter = filterByParam[searchParams.get('filter')] || 'Toutes';
+
+  function setFilter(nextFilter) {
+    const nextParam = paramByFilter[nextFilter];
+    setSearchParams(nextParam ? { filter: nextParam } : {}, { replace: true });
+  }
 
   const avatarUrl = "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=150";
 
@@ -73,9 +89,10 @@ export function OrganizationPage() {
           </div>
 
           {/* KANBAN BOARD */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-2">
+          <div className={`grid grid-cols-1 gap-6 pt-2 ${filter === 'Toutes' ? 'md:grid-cols-3' : 'md:grid-cols-1'}`}>
             
             {/* COLONNE 1 : À FAIRE */}
+            {(filter === 'Toutes' || filter === 'À faire') && (
             <Card className="p-5 bg-white border border-gray-200/60 rounded-3xl shadow-sm space-y-4">
               <div className="flex justify-between items-center pb-1">
                 <h3 className="font-extrabold text-sm text-gray-900">À faire</h3>
@@ -118,8 +135,10 @@ export function OrganizationPage() {
                 </div>
               </div>
             </Card>
+            )}
 
             {/* COLONNE 2 : EN COURS */}
+            {(filter === 'Toutes' || filter === 'En cours') && (
             <Card className="p-5 bg-white border border-gray-200/60 rounded-3xl shadow-sm space-y-4">
               <div className="flex justify-between items-center pb-1">
                 <h3 className="font-extrabold text-sm text-gray-900">En cours</h3>
@@ -162,8 +181,10 @@ export function OrganizationPage() {
                 </div>
               </div>
             </Card>
+            )}
 
             {/* COLONNE 3 : TERMINÉ */}
+            {(filter === 'Toutes' || filter === 'Terminé') && (
             <Card className="p-5 bg-white border border-gray-200/60 rounded-3xl shadow-sm space-y-4">
               <div className="flex justify-between items-center pb-1">
                 <h3 className="font-extrabold text-sm text-gray-900">Terminé</h3>
@@ -206,6 +227,7 @@ export function OrganizationPage() {
                 </div>
               </div>
             </Card>
+            )}
 
           </div>
 

@@ -1,3 +1,5 @@
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Card } from '../../components/ui/Card';
 import { Button } from '../../components/ui/Button';
 import { AppSidebar } from '../../components/layout/AppSidebar.jsx';
@@ -16,6 +18,9 @@ import {
 } from 'lucide-react';
 
 export function DashboardPage() {
+  const [isActionDone, setIsActionDone] = useState(false);
+  const navigate = useNavigate();
+
   return (
     <div className="min-h-screen bg-[#F7F5F0] flex text-gray-900 font-sans p-4 md:p-6">
       <div className="max-w-[1440px] mx-auto w-full flex gap-6">
@@ -96,25 +101,40 @@ export function DashboardPage() {
               </Card>
             </div>
 
-            {/* Colonne Droite : Carte Action Traitée */}
-            <div className="lg:col-span-5 bg-[#00A86B] text-white p-7 rounded-3xl flex flex-col justify-between shadow-sm">
+            {/* Colonne Droite : prochaine action */}
+            <div className={`lg:col-span-5 p-7 rounded-3xl flex flex-col justify-between shadow-sm ${isActionDone ? 'bg-[#00A86B] text-white' : 'bg-[#F5A000] text-[#18181B]'}`}>
               <div>
-                <span className="inline-block px-3 py-1 rounded-full bg-black/20 text-white text-[10px] font-bold tracking-wider uppercase">
-                  ACTION TRAITÉE
+                <span className={`inline-block px-3 py-1 rounded-full text-[10px] font-bold tracking-wider uppercase ${isActionDone ? 'bg-black/20 text-white' : 'bg-black/10 text-gray-900'}`}>
+                  {isActionDone ? 'ACTION TRAITÉE' : 'ACTION À TRAITER'}
                 </span>
                 <h2 className="text-2xl md:text-3xl font-extrabold leading-snug mt-6">
-                  Excellent. Ton prochain cap arrive demain.
+                  {isActionDone ? 'Excellent. Ton prochain cap arrive demain.' : 'Sécurise ton budget marketing.'}
                 </h2>
-                <div className="mt-6 space-y-2 text-xs text-white/90 leading-relaxed font-medium">
+                <div className={`mt-6 space-y-2 text-xs leading-relaxed font-medium ${isActionDone ? 'text-white/90' : 'text-gray-900/75'}`}>
                   <p>Raison · Dépenses marketing à +20 % ce mois</p>
                   <p>Échéance · Vendredi 18 septembre</p>
                   <p>Impact · Protège le budget du lancement</p>
                 </div>
               </div>
 
-              <Button className="w-full bg-[#FFB800] hover:bg-[#E0A200] text-black font-bold py-3.5 rounded-2xl flex items-center justify-center gap-2 mt-8 shadow-sm">
-                <Check size={18} strokeWidth={3} /> C'est fait
-              </Button>
+              <div className="mt-8 space-y-2">
+                <Button
+                  type="button"
+                  onClick={() => navigate('/organization?filter=todo')}
+                  className={`w-full font-bold py-3.5 rounded-2xl flex items-center justify-center gap-2 shadow-sm ${isActionDone ? 'bg-[#FFB800] hover:bg-[#E0A200] text-black' : 'bg-[#18181B] hover:bg-[#2A2A2C] text-white'}`}
+                >
+                  Voir les actions à traiter <ChevronRight size={18} />
+                </Button>
+                <Button
+                  type="button"
+                  disabled={isActionDone}
+                  onClick={() => setIsActionDone(true)}
+                  className={`w-full font-bold py-2.5 rounded-xl flex items-center justify-center gap-2 ${isActionDone ? 'bg-white/70 text-gray-700' : 'bg-white/80 hover:bg-white text-gray-900'}`}
+                >
+                  <Check size={16} strokeWidth={3} />
+                  {isActionDone ? "C'est fait" : 'Marquer comme fait'}
+                </Button>
+              </div>
             </div>
           </div>
 
