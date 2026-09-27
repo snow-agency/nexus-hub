@@ -30,7 +30,6 @@ app.use('/tasks', taskRoutes);
 app.use('/finance', financeRoutes);
 app.use('/dashboard', dashboardRoutes);
 app.use(errorHandler);
-
 app.listen(port, () => {
   console.log(`API démarrée sur http://localhost:${port}`);
 });

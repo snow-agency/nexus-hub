@@ -1,8 +1,9 @@
 # Nexus Hub
 
-Nexus Hub is a monorepo with separate frontend and backend workspaces:
+Nexus Hub is a monorepo with a root-level React application and separate frontend and backend workspaces:
 
-- `apps/web` contains the React and Vite frontend.
+- `src` contains the React application and its pages/components.
+- `apps/web` provides the Vite workspace that serves and builds the root-level application.
 - `apps/api` contains the Express API and Prisma database layer.
 
 ## Development
