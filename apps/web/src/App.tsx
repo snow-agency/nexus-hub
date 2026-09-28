@@ -1,14 +1,27 @@
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
+import { AuthProvider } from './context/AuthContext';
+import { ProtectedRoute } from './components/auth/ProtectedRoute';
+import Login from './pages/auth/Login';
+import Register from './pages/auth/Register';
+import Dashboard from './pages/Dashboard';
+
 function App() {
   return (
-    <main className="min-h-screen bg-bg-light p-8 font-sans">
-      <h1 className="mb-4 text-3xl font-bold text-primary">Design System — Nexus Hub</h1>
-      <button
-        type="button"
-        className="rounded-lg bg-primary px-4 py-2 text-white transition-colors hover:bg-primary-hover"
-      >
-        Bouton Test
-      </button>
-    </main>
+    <AuthProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Navigate to="/login" replace />} />
+
+          <Route path="/login" element={<Login />} />
+
+          <Route path="/register" element={<Register />} />
+
+          <Route element={<ProtectedRoute />}>
+            <Route path="/dashboard" element={<Dashboard />} />
+          </Route>
+        </Routes>
+      </BrowserRouter>
+    </AuthProvider>
   );
 }
 
