@@ -5,6 +5,7 @@ import { Prisma } from '@prisma/client';
 import { prisma } from '../../db/prisma.js';
 import { registerSchema, loginSchema } from './auth.schema.js';
 import { JWT_SECRET } from '../../config/env.js';
+import { AuthRequest } from '../../middlewares/auth.middleware.js';
 
 export async function register(req: Request, res: Response) {
   const result = registerSchema.safeParse(req.body);
@@ -55,4 +56,17 @@ export async function login(req: Request, res: Response) {
     token,
     user: { id: user.id, email: user.email, name: user.name },
   });
+}
+
+export async function getMe(req: AuthRequest, res: Response) {
+  const user = await prisma.user.findUnique({
+    where: { id: req.userId as string },
+    select: { id: true, email: true, name: true },
+  });
+
+  if (!user) {
+    return res.status(404).json({ error: 'Utilisateur introuvable.' });
+  }
+
+  res.json(user);
 }
