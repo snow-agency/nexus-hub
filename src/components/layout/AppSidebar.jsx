@@ -23,9 +23,9 @@ const navigationItems = [
   { id: 'organization', label: 'Organisation', icon: Layers, to: '/organization' },
   { id: 'finance', label: 'Finance', icon: Coins, to: '/finance' },
   { id: 'strategy', label: 'Stratégie', icon: Target, to: '/strategy' },
-  { id: 'team', label: 'Équipe', icon: Users, to: '/team' },
-  { label: 'Performance', icon: TrendingUp },
-  { label: 'Réseau', icon: Globe },
+  { label: 'Équipe', icon: Users },
+  { id: 'performance', label: 'Performance', icon: TrendingUp, to: '/performance' },
+  { id: 'network', label: 'Réseau', icon: Globe, to: '/network' },
 ]
 
 export function AppSidebar({ activePage }) {
