@@ -22,8 +22,8 @@ const navigationItems = [
   { id: 'project', label: 'Mon projet', icon: Briefcase, to: '/project' },
   { id: 'organization', label: 'Organisation', icon: Layers, to: '/organization' },
   { id: 'finance', label: 'Finance', icon: Coins, to: '/finance' },
-  { label: 'Stratégie', icon: Target },
-  { label: 'Équipe', icon: Users },
+  { id: 'strategy', label: 'Stratégie', icon: Target, to: '/strategy' },
+  { id: 'team', label: 'Équipe', icon: Users, to: '/team' },
   { label: 'Performance', icon: TrendingUp },
   { label: 'Réseau', icon: Globe },
 ]
