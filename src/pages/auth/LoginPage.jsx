@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { ArrowRight, LockKeyhole, Mail, Sparkles } from 'lucide-react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
@@ -17,7 +16,6 @@ export default function LoginPage() {
 
   async function handleSubmit(event) {
     event.preventDefault();
-
     setError('');
     setIsLoading(true);
 
@@ -28,7 +26,7 @@ export default function LoginPage() {
         replace: true,
       });
     } catch (error) {
-      setError( error.response?.data?.error || 'Une erreur est survenue. Veuillez réessayer.', );
+      setError(error.response?.data?.error || 'Une erreur est survenue. Veuillez réessayer.');
     } finally {
       setIsLoading(false);
     }
@@ -38,15 +36,19 @@ export default function LoginPage() {
     <div className="flex min-h-screen flex-col bg-[#F7F5F0] font-sans text-[#1D2B27]">
       <header className="mx-auto flex w-full max-w-6xl items-center justify-between px-5 py-4 sm:px-8">
         <div className="flex items-center gap-3 sm:gap-5">
-          <a aria-label="Nexus Hub, accueil" className="flex items-center gap-2" href="/" >
-            <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#17352B] text-sm font-bold text-white"> N </span>
+          <a aria-label="Nexus Hub, accueil" className="flex items-center gap-2" href="/">
+            <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#17352B] text-sm font-bold text-white">
+              N
+            </span>
             <span className="text-sm font-semibold">Nexus Hub</span>
           </a>
         </div>
 
         <p className="text-xs text-gray-600">
           Pas encore de compte?{' '}
-          <Link className="font-semibold text-[#C47B00] hover:underline" to="/register" > Créer un compte </Link>
+          <Link className="font-semibold text-[#C47B00] hover:underline" to="/register">
+            Créer un compte
+          </Link>
         </p>
       </header>
 
@@ -58,17 +60,23 @@ export default function LoginPage() {
               Maquette
             </span>
 
-            <h1 className="mt-4 text-2xl font-bold leading-tight"> Bon retour. </h1>
+            <h1 className="mt-4 text-2xl font-bold leading-tight">Bon retour.</h1>
 
-            <p className="mt-1.5 text-xs leading-relaxed text-[#718078]"> Connectez-vous pour retrouver votre cap, vos tâches et votre budget. </p>
+            <p className="mt-1.5 text-xs leading-relaxed text-[#718078]">
+              Connectez-vous pour retrouver votre cap, vos tâches et votre budget.
+            </p>
           </div>
 
           <form className="space-y-3.5" onSubmit={handleSubmit}>
             <label className="block space-y-1.5">
-              <span className="text-xs font-semibold text-gray-800"> Adresse e-mail </span>
+              <span className="text-xs font-semibold text-gray-800">Adresse e-mail</span>
 
               <span className="relative block">
-                <Mail aria-hidden="true" className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" size={15} />
+                <Mail
+                  aria-hidden="true"
+                  className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-gray-500"
+                  size={15}
+                />
 
                 <input
                   autoComplete="email"
@@ -86,7 +94,7 @@ export default function LoginPage() {
             </label>
 
             <label className="block space-y-1.5">
-              <span className="text-xs font-semibold text-gray-800"> Mot de passe </span>
+              <span className="text-xs font-semibold text-gray-800">Mot de passe</span>
 
               <span className="relative block">
                 <LockKeyhole
@@ -121,16 +129,13 @@ export default function LoginPage() {
                 Se souvenir de moi
               </label>
 
-              <Link
-                className="text-gray-500 hover:text-[#005C46]"
-                to="/forgot-password"></Link>
+              <Link className="text-gray-500 hover:text-[#005C46]" to="/forgot-password">
+                Mot de passe oublié ?
+              </Link>
             </div>
 
             {error && (
-              <p
-                aria-live="polite"
-                className="text-xs font-medium text-red-700"
-              >
+              <p aria-live="polite" className="text-xs font-medium text-red-700">
                 {error}
               </p>
             )}
@@ -149,7 +154,3 @@ export default function LoginPage() {
     </div>
   );
 }
-
-
-
-

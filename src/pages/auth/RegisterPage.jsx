@@ -1,6 +1,5 @@
-
 import { useState } from 'react';
-import { ArrowLeft, ArrowRight, LockKeyhole, Mail, Sparkles, UserRound, } from 'lucide-react';
+import { ArrowLeft, ArrowRight, LockKeyhole, Mail, Sparkles, UserRound } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext.jsx';
 
@@ -33,7 +32,7 @@ export default function RegisterPage() {
 
       navigate('/dashboard', { replace: true });
     } catch (error) {
-      setError( error.response?.data?.error || 'Une erreur est survenue. Veuillez réessayer.', );
+      setError(error.response?.data?.error || 'Une erreur est survenue. Veuillez réessayer.');
     } finally {
       setIsLoading(false);
     }
@@ -42,21 +41,28 @@ export default function RegisterPage() {
   return (
     <div className="flex min-h-screen flex-col bg-[#F7F5F0] font-sans text-[#1D2B27]">
       <header className="mx-auto flex w-full max-w-6xl items-center justify-between px-5 py-4 sm:px-8">
-        <Link aria-label="Nexus Hub, accueil" className="flex items-center gap-2" to="/" >
-          <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#17352B] text-sm font-bold text-white"> N </span>
+        <Link aria-label="Nexus Hub, accueil" className="flex items-center gap-2" to="/">
+          <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#17352B] text-sm font-bold text-white">
+            N
+          </span>
           <span className="text-sm font-semibold">Nexus Hub</span>
         </Link>
 
         <p className="text-xs text-gray-600">
           Déjà un compte?{' '}
-          <Link className="font-semibold text-[#C47B00] hover:underline" to="/auth" > Se connecter </Link>
+          <Link className="font-semibold text-[#C47B00] hover:underline" to="/auth">
+            Se connecter
+          </Link>
         </p>
       </header>
 
       <main className="flex flex-1 items-center justify-center px-4 py-8">
         <section className="w-full max-w-[420px] rounded-xl border border-[#E9E4DA] bg-white p-6 shadow-[0_8px_20px_rgba(37,37,25,0.08)] sm:p-8">
           <div className="mb-5">
-            <Link className="inline-flex items-center gap-1 text-xs text-gray-600 transition-colors hover:text-[#005C46]" to="/" >
+            <Link
+              className="inline-flex items-center gap-1 text-xs text-gray-600 transition-colors hover:text-[#005C46]"
+              to="/"
+            >
               <ArrowLeft aria-hidden="true" size={14} />
               Retour à l’accueil
             </Link>
@@ -66,17 +72,23 @@ export default function RegisterPage() {
               Créer votre espace
             </span>
 
-            <h1 className="mt-3 text-2xl font-bold leading-tight"> Votre projet commence ici. </h1>
+            <h1 className="mt-3 text-2xl font-bold leading-tight">Votre projet commence ici.</h1>
 
-            <p className="mt-1.5 text-xs leading-relaxed text-[#718078]"> Créez votre compte pour organiser vos priorités et faire avancer votre projet. </p>
+            <p className="mt-1.5 text-xs leading-relaxed text-[#718078]">
+              Créez votre compte pour organiser vos priorités et faire avancer votre projet.
+            </p>
           </div>
 
           <form className="space-y-3.5" onSubmit={handleSubmit}>
             <label className="block space-y-1.5">
-              <span className="text-xs font-semibold text-gray-800"> Nom complet </span>
+              <span className="text-xs font-semibold text-gray-800">Nom complet</span>
 
               <span className="relative block">
-                <UserRound aria-hidden="true" className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" size={15} />
+                <UserRound
+                  aria-hidden="true"
+                  className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-gray-500"
+                  size={15}
+                />
 
                 <input
                   autoComplete="name"
@@ -95,10 +107,14 @@ export default function RegisterPage() {
             </label>
 
             <label className="block space-y-1.5">
-              <span className="text-xs font-semibold text-gray-800"> Adresse e-mail </span>
+              <span className="text-xs font-semibold text-gray-800">Adresse e-mail</span>
 
               <span className="relative block">
-                <Mail aria-hidden="true" className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" size={15} />
+                <Mail
+                  aria-hidden="true"
+                  className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-gray-500"
+                  size={15}
+                />
 
                 <input
                   autoComplete="email"
@@ -116,10 +132,14 @@ export default function RegisterPage() {
             </label>
 
             <label className="block space-y-1.5">
-              <span className="text-xs font-semibold text-gray-800"> Mot de passe </span>
+              <span className="text-xs font-semibold text-gray-800">Mot de passe</span>
 
               <span className="relative block">
-                <LockKeyhole aria-hidden="true" className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" size={15} />
+                <LockKeyhole
+                  aria-hidden="true"
+                  className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-gray-500"
+                  size={15}
+                />
 
                 <input
                   autoComplete="new-password"
@@ -138,10 +158,14 @@ export default function RegisterPage() {
             </label>
 
             <label className="block space-y-1.5">
-              <span className="text-xs font-semibold text-gray-800"> Confirmer le mot de passe </span>
+              <span className="text-xs font-semibold text-gray-800">Confirmer le mot de passe</span>
 
               <span className="relative block">
-                <LockKeyhole aria-hidden="true" className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" size={15} />
+                <LockKeyhole
+                  aria-hidden="true"
+                  className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-gray-500"
+                  size={15}
+                />
 
                 <input
                   autoComplete="new-password"
@@ -159,10 +183,7 @@ export default function RegisterPage() {
             </label>
 
             {error && (
-              <p
-                aria-live="polite"
-                className="text-xs font-medium text-red-700"
-              >
+              <p aria-live="polite" className="text-xs font-medium text-red-700">
                 {error}
               </p>
             )}
@@ -181,4 +202,3 @@ export default function RegisterPage() {
     </div>
   );
 }
-
