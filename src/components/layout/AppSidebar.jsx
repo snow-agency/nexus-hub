@@ -1,5 +1,6 @@
 import { createElement } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext.jsx';
 import {
   Bell,
   Briefcase,
@@ -15,25 +16,23 @@ import {
 } from 'lucide-react';
 import { Button } from '../ui/Button.jsx';
 
-const AUTH_STORAGE_KEY = 'nexusHubAuthenticated';
-
 const navigationItems = [
   { id: 'dashboard', label: "Vue d'ensemble", icon: LayoutDashboard, to: '/dashboard' },
   { id: 'project', label: 'Mon projet', icon: Briefcase, to: '/project' },
   { id: 'organization', label: 'Organisation', icon: Layers, to: '/organization' },
   { id: 'finance', label: 'Finance', icon: Coins, to: '/finance' },
-  { label: 'Stratégie', icon: Target },
-  { label: 'Équipe', icon: Users },
-  { label: 'Performance', icon: TrendingUp },
-  { label: 'Réseau', icon: Globe },
+  { id: 'strategy', label: 'Stratégie', icon: Target, to: '/strategy' },
+  { id: 'team', label: 'Équipe', icon: Users, to: '/team' },
+  { id: 'performance', label: 'Performance', icon: TrendingUp, to: '/performance' },
+  { id: 'network', label: 'Réseau', icon: Globe, to: '/network' },
 ];
 
 export function AppSidebar({ activePage }) {
   const navigate = useNavigate();
+  const { logout } = useAuth();
 
   function handleLogout() {
-    window.localStorage.removeItem(AUTH_STORAGE_KEY);
-    window.sessionStorage.removeItem(AUTH_STORAGE_KEY);
+    logout();
     navigate('/auth', { replace: true });
   }
 
