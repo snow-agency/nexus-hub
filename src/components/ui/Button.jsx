@@ -7,7 +7,7 @@ export function Button({ variant = 'primary', children, className = '', ...props
     login:
       'h-11 w-full rounded-lg bg-[#F5A000] px-4 text-sm font-medium text-[#14241E] shadow-sm hover:bg-[#E39600]',
     primary: 'rounded-md bg-primary text-white hover:bg-primary-hover',
-  }[variant]
+  }[variant];
 
   return (
     <button
@@ -16,7 +16,7 @@ export function Button({ variant = 'primary', children, className = '', ...props
     >
       {children}
     </button>
-  )
+  );
 }
 
-export default Button
+export default Button;

@@ -1,5 +1,6 @@
-import { createElement } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { createElement } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext.jsx';
 import {
   Bell,
   Briefcase,
@@ -12,10 +13,8 @@ import {
   Target,
   TrendingUp,
   Users,
-} from 'lucide-react'
-import { Button } from '../ui/Button.jsx'
-
-const AUTH_STORAGE_KEY = 'nexusHubAuthenticated'
+} from 'lucide-react';
+import { Button } from '../ui/Button.jsx';
 
 const navigationItems = [
   { id: 'dashboard', label: "Vue d'ensemble", icon: LayoutDashboard, to: '/dashboard' },
@@ -26,15 +25,15 @@ const navigationItems = [
   { id: 'team', label: 'Équipe', icon: Users, to: '/team' },
   { id: 'performance', label: 'Performance', icon: TrendingUp, to: '/performance' },
   { id: 'network', label: 'Réseau', icon: Globe, to: '/network' },
-]
+];
 
 export function AppSidebar({ activePage }) {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+  const { logout } = useAuth();
 
   function handleLogout() {
-    window.localStorage.removeItem(AUTH_STORAGE_KEY)
-    window.sessionStorage.removeItem(AUTH_STORAGE_KEY)
-    navigate('/auth', { replace: true })
+    logout();
+    navigate('/auth', { replace: true });
   }
 
   return (
@@ -63,18 +62,18 @@ export function AppSidebar({ activePage }) {
 
         <nav aria-label="Navigation principale" className="space-y-1 pt-2">
           {navigationItems.map(({ id, label, icon, to }) => {
-            const isActive = id === activePage
+            const isActive = id === activePage;
             const className = `flex items-center gap-3 rounded-full px-4 py-2.5 text-sm transition-colors ${
               isActive
                 ? 'bg-[#18181B] font-semibold text-white'
                 : 'font-medium text-gray-600 hover:bg-black/5'
-            }`
+            }`;
             const contents = (
               <>
                 {createElement(icon, { size: 18 })}
                 <span>{label}</span>
               </>
-            )
+            );
 
             return to ? (
               <Link
@@ -89,7 +88,7 @@ export function AppSidebar({ activePage }) {
               <a key={label} className={className} href="#">
                 {contents}
               </a>
-            )
+            );
           })}
         </nav>
       </div>
@@ -114,5 +113,5 @@ export function AppSidebar({ activePage }) {
         </button>
       </div>
     </aside>
-  )
+  );
 }

@@ -1,25 +1,35 @@
-import { useState } from 'react'
-import { ArrowRight, LockKeyhole, Mail, Sparkles } from 'lucide-react'
-import { Link, useLocation, useNavigate } from 'react-router-dom'
-
-const AUTH_STORAGE_KEY = 'nexusHubAuthenticated'
+import { useState } from 'react';
+import { ArrowRight, LockKeyhole, Mail, Sparkles } from 'lucide-react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext.jsx';
 
 export default function LoginPage() {
-  const navigate = useNavigate()
-  const location = useLocation()
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [rememberMe, setRememberMe] = useState(false)
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { login } = useAuth();
 
-  function handleSubmit(event) {
-    event.preventDefault()
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [rememberMe, setRememberMe] = useState(false);
+  const [error, setError] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
-    const storage = rememberMe ? window.localStorage : window.sessionStorage
-    const otherStorage = rememberMe ? window.sessionStorage : window.localStorage
-    storage.setItem(AUTH_STORAGE_KEY, 'true')
-    otherStorage.removeItem(AUTH_STORAGE_KEY)
+  async function handleSubmit(event) {
+    event.preventDefault();
+    setError('');
+    setIsLoading(true);
 
-    navigate(location.state?.from?.pathname || '/dashboard', { replace: true })
+    try {
+      await login(email, password, rememberMe);
+
+      navigate(location.state?.from?.pathname || '/dashboard', {
+        replace: true,
+      });
+    } catch (error) {
+      setError(error.response?.data?.error || 'Une erreur est survenue. Veuillez réessayer.');
+    } finally {
+      setIsLoading(false);
+    }
   }
 
   return (
@@ -33,6 +43,7 @@ export default function LoginPage() {
             <span className="text-sm font-semibold">Nexus Hub</span>
           </a>
         </div>
+
         <p className="text-xs text-gray-600">
           Pas encore de compte?{' '}
           <Link className="font-semibold text-[#C47B00] hover:underline" to="/register">
@@ -48,7 +59,9 @@ export default function LoginPage() {
               <Sparkles aria-hidden="true" size={12} />
               Maquette
             </span>
+
             <h1 className="mt-4 text-2xl font-bold leading-tight">Bon retour.</h1>
+
             <p className="mt-1.5 text-xs leading-relaxed text-[#718078]">
               Connectez-vous pour retrouver votre cap, vos tâches et votre budget.
             </p>
@@ -57,16 +70,21 @@ export default function LoginPage() {
           <form className="space-y-3.5" onSubmit={handleSubmit}>
             <label className="block space-y-1.5">
               <span className="text-xs font-semibold text-gray-800">Adresse e-mail</span>
+
               <span className="relative block">
                 <Mail
                   aria-hidden="true"
                   className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-gray-500"
                   size={15}
                 />
+
                 <input
                   autoComplete="email"
                   className="h-11 w-full rounded-xl border border-[#E8E1D5] bg-[#FAF7F1] pl-9 pr-3 text-sm text-gray-800 outline-none transition focus:border-[#005C46] focus:ring-2 focus:ring-[#005C46]/10"
-                  onChange={(event) => setEmail(event.target.value)}
+                  onChange={(event) => {
+                    setEmail(event.target.value);
+                    setError('');
+                  }}
                   placeholder="aminata@mafood.tg"
                   required
                   type="email"
@@ -77,16 +95,21 @@ export default function LoginPage() {
 
             <label className="block space-y-1.5">
               <span className="text-xs font-semibold text-gray-800">Mot de passe</span>
+
               <span className="relative block">
                 <LockKeyhole
                   aria-hidden="true"
                   className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-gray-500"
                   size={15}
                 />
+
                 <input
                   autoComplete="current-password"
                   className="h-11 w-full rounded-xl border border-[#E8E1D5] bg-[#FAF7F1] pl-9 pr-3 text-sm text-gray-800 outline-none transition focus:border-[#005C46] focus:ring-2 focus:ring-[#005C46]/10"
-                  onChange={(event) => setPassword(event.target.value)}
+                  onChange={(event) => {
+                    setPassword(event.target.value);
+                    setError('');
+                  }}
                   placeholder="••••••••"
                   required
                   type="password"
@@ -105,20 +128,29 @@ export default function LoginPage() {
                 />
                 Se souvenir de moi
               </label>
-              <a className="text-gray-500 hover:text-[#005C46]" href="#mot-de-passe-oublie">
+
+              <Link className="text-gray-500 hover:text-[#005C46]" to="/forgot-password">
                 Mot de passe oublié ?
-              </a>
+              </Link>
             </div>
 
+            {error && (
+              <p aria-live="polite" className="text-xs font-medium text-red-700">
+                {error}
+              </p>
+            )}
+
             <button
-              className="flex h-11 w-full items-center justify-center gap-2 rounded-lg bg-[#F5A000] px-4 text-sm font-medium text-[#14241E] shadow-sm transition-colors hover:bg-[#E39600]"
+              className="flex h-11 w-full items-center justify-center gap-2 rounded-lg bg-[#F5A000] px-4 text-sm font-medium text-[#14241E] shadow-sm transition-colors hover:bg-[#E39600] disabled:cursor-not-allowed disabled:opacity-60"
+              disabled={isLoading}
               type="submit"
             >
-              Se connecter <ArrowRight aria-hidden="true" size={15} />
+              {isLoading ? 'Connexion...' : 'Se connecter'}
+              {!isLoading && <ArrowRight aria-hidden="true" size={15} />}
             </button>
           </form>
         </section>
       </main>
     </div>
-  )
+  );
 }

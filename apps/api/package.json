@@ -10,11 +10,12 @@
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate dev",
     "prisma:studio": "prisma studio",
-    "test": "vitest run",
+    "test": "vitest run --config vitest.config.ts",
     "lint": "eslint ."
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.27.3",
+    "@google/generative-ai": "^0.24.1",
     "@prisma/client": "^5.19.1",
     "bcryptjs": "^3.0.3",
     "cors": "^2.8.5",

@@ -2,15 +2,12 @@ import { useState } from 'react';
 import { AppSidebar } from '../../components/layout/AppSidebar.jsx';
 import { Card } from '../../components/ui/Card';
 import { Button } from '../../components/ui/Button';
-import { 
-  Bell, 
-  Check, 
-  Save
-} from 'lucide-react';
+import { Bell, Check, Save } from 'lucide-react';
 
 const PROJECT_DATA_KEY = 'nexusHubProjectData';
 const DEFAULT_FORM_DATA = {
-  description: 'MomoFood rend les repas maison accessibles en moins de 30 minutes dans les quartiers actifs de Lomé.',
+  description:
+    'MomoFood rend les repas maison accessibles en moins de 30 minutes dans les quartiers actifs de Lomé.',
   secteur: 'Food & livraison',
   pays: 'Togo',
   budget: '750 000 FCFA',
@@ -52,12 +49,10 @@ export function ProjectPage() {
   return (
     <div className="min-h-screen bg-[#F7F5F0] flex text-gray-900 font-sans p-4 md:p-6">
       <div className="max-w-[1440px] mx-auto w-full flex gap-6">
-        
         <AppSidebar activePage="project" />
 
         {/* CONTENU PRINCIPAL */}
         <main className="flex-1 space-y-6 overflow-y-auto">
-          
           {/* Header Supérieur */}
           <header className="flex items-center justify-end gap-3">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/80 border border-gray-200/80 text-xs text-gray-600 font-medium">
@@ -71,14 +66,20 @@ export function ProjectPage() {
               Changer de projet
             </button>
             <div className="w-8 h-8 rounded-full overflow-hidden border border-gray-200">
-              <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=150" alt="Avatar" className="w-full h-full object-cover" />
+              <img
+                src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=150"
+                alt="Avatar"
+                className="w-full h-full object-cover"
+              />
             </div>
           </header>
 
           {/* HEADER PAGE MON PROJET */}
           <div className="flex flex-col md:flex-row md:items-start justify-between gap-4">
             <div className="space-y-1 max-w-2xl">
-              <p className="text-[11px] font-bold tracking-wider text-gray-400 uppercase">MON PROJET</p>
+              <p className="text-[11px] font-bold tracking-wider text-gray-400 uppercase">
+                MON PROJET
+              </p>
               <h1 className="text-3xl md:text-4xl font-black text-gray-900 leading-tight">
                 Une vision claire, de l'idée à la croissance.
               </h1>
@@ -98,49 +99,48 @@ export function ProjectPage() {
 
           {/* SECTION : CARTE D'IDENTITÉ & PHASE DÉTECTÉE */}
           <div className="grid lg:grid-cols-12 gap-6 items-stretch">
-            
             {/* Carte d'identité */}
             <Card className="lg:col-span-8 p-6 bg-white border border-gray-200/60 rounded-3xl shadow-sm space-y-5">
               <h3 className="font-extrabold text-base text-gray-900">Carte d'identité</h3>
-              
+
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-1.5">
                   <label className="text-[11px] text-gray-400 font-medium">Secteur</label>
-                  <input 
-                    type="text" 
-                    value={formData.secteur} 
+                  <input
+                    type="text"
+                    value={formData.secteur}
                     onChange={(e) => updateField('secteur', e.target.value)}
-                    className="w-full bg-[#F7F5F0] border-0 rounded-2xl px-4 py-3 text-xs font-semibold text-gray-900 focus:ring-2 focus:ring-[#005C46] outline-none" 
+                    className="w-full bg-[#F7F5F0] border-0 rounded-2xl px-4 py-3 text-xs font-semibold text-gray-900 focus:ring-2 focus:ring-[#005C46] outline-none"
                   />
                 </div>
 
                 <div className="space-y-1.5">
                   <label className="text-[11px] text-gray-400 font-medium">Pays pilote</label>
-                  <input 
-                    type="text" 
-                    value={formData.pays} 
+                  <input
+                    type="text"
+                    value={formData.pays}
                     onChange={(e) => updateField('pays', e.target.value)}
-                    className="w-full bg-[#F7F5F0] border-0 rounded-2xl px-4 py-3 text-xs font-semibold text-gray-900 focus:ring-2 focus:ring-[#005C46] outline-none" 
+                    className="w-full bg-[#F7F5F0] border-0 rounded-2xl px-4 py-3 text-xs font-semibold text-gray-900 focus:ring-2 focus:ring-[#005C46] outline-none"
                   />
                 </div>
 
                 <div className="space-y-1.5">
                   <label className="text-[11px] text-gray-400 font-medium">Budget global</label>
-                  <input 
-                    type="text" 
-                    value={formData.budget} 
+                  <input
+                    type="text"
+                    value={formData.budget}
                     onChange={(e) => updateField('budget', e.target.value)}
-                    className="w-full bg-[#F7F5F0] border-0 rounded-2xl px-4 py-3 text-xs font-semibold text-gray-900 focus:ring-2 focus:ring-[#005C46] outline-none" 
+                    className="w-full bg-[#F7F5F0] border-0 rounded-2xl px-4 py-3 text-xs font-semibold text-gray-900 focus:ring-2 focus:ring-[#005C46] outline-none"
                   />
                 </div>
 
                 <div className="space-y-1.5">
                   <label className="text-[11px] text-gray-400 font-medium">Objectif</label>
-                  <input 
-                    type="text" 
-                    value={formData.objectif} 
+                  <input
+                    type="text"
+                    value={formData.objectif}
                     onChange={(e) => updateField('objectif', e.target.value)}
-                    className="w-full bg-[#F7F5F0] border-0 rounded-2xl px-4 py-3 text-xs font-semibold text-gray-900 focus:ring-2 focus:ring-[#005C46] outline-none" 
+                    className="w-full bg-[#F7F5F0] border-0 rounded-2xl px-4 py-3 text-xs font-semibold text-gray-900 focus:ring-2 focus:ring-[#005C46] outline-none"
                   />
                 </div>
               </div>
@@ -149,7 +149,9 @@ export function ProjectPage() {
             {/* Phase détectée */}
             <Card className="lg:col-span-4 p-6 bg-white border border-gray-200/60 rounded-3xl shadow-sm space-y-4">
               <div className="space-y-1">
-                <p className="text-[10px] font-bold tracking-wider text-gray-400 uppercase">PHASE DÉTECTÉE</p>
+                <p className="text-[10px] font-bold tracking-wider text-gray-400 uppercase">
+                  PHASE DÉTECTÉE
+                </p>
                 <h3 className="text-2xl font-black text-[#00A86B]">Lancement</h3>
                 <p className="text-xs text-gray-500 leading-relaxed pt-1">
                   Tu as déjà testé ton offre et prépares tes premières ventes régulières.
@@ -198,7 +200,6 @@ export function ProjectPage() {
 
             {/* Grille BMC */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              
               {/* Ligne 1 */}
               <div className="p-4 bg-[#F7F5F0] rounded-2xl space-y-1">
                 <p className="text-[11px] font-bold text-gray-900">Proposition de valeur</p>
@@ -246,10 +247,8 @@ export function ProjectPage() {
                 <p className="text-[11px] font-bold text-gray-800">Structure de coûts</p>
                 <p className="text-xs text-gray-400">À compléter</p>
               </div>
-
             </div>
           </Card>
-
         </main>
       </div>
     </div>

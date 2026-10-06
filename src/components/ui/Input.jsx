@@ -1,8 +1,8 @@
-import { useId } from 'react'
+import { useId } from 'react';
 
 export function Input({ label, leadingIcon: LeadingIcon, id, className = '', ...props }) {
-  const generatedId = useId()
-  const inputId = id ?? generatedId
+  const generatedId = useId();
+  const inputId = id ?? generatedId;
 
   return (
     <div className="space-y-1.5">
@@ -26,7 +26,7 @@ export function Input({ label, leadingIcon: LeadingIcon, id, className = '', ...
         />
       </div>
     </div>
-  )
+  );
 }
 
-export default Input
+export default Input;
