@@ -14,8 +14,7 @@ export function AuthProvider({ children }) {
   useEffect(() => {
     async function restoreSession() {
       const storedToken =
-        window.localStorage.getItem(TOKEN_KEY) ||
-        window.sessionStorage.getItem(TOKEN_KEY);
+        window.localStorage.getItem(TOKEN_KEY) || window.sessionStorage.getItem(TOKEN_KEY);
 
       if (!storedToken) {
         setIsLoading(false);
@@ -62,13 +61,9 @@ export function AuthProvider({ children }) {
 
     const { token: receivedToken, user: receivedUser } = response.data;
 
-    const storage = rememberMe
-      ? window.localStorage
-      : window.sessionStorage;
+    const storage = rememberMe ? window.localStorage : window.sessionStorage;
 
-    const otherStorage = rememberMe
-      ? window.sessionStorage
-      : window.localStorage;
+    const otherStorage = rememberMe ? window.sessionStorage : window.localStorage;
 
     storage.setItem(TOKEN_KEY, receivedToken);
     storage.setItem(USER_KEY, JSON.stringify(receivedUser));
@@ -112,20 +107,14 @@ export function AuthProvider({ children }) {
     logout,
   };
 
-  return (
-    <AuthContext.Provider value={value}>
-      {children}
-    </AuthContext.Provider>
-  );
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
 
 export function useAuth() {
   const context = useContext(AuthContext);
 
   if (!context) {
-    throw new Error(
-      'useAuth doit être utilisé à l’intérieur de AuthProvider.',
-    );
+    throw new Error('useAuth doit être utilisé à l’intérieur de AuthProvider.');
   }
 
   return context;

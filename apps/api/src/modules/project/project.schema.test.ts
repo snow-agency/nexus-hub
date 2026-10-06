@@ -40,10 +40,10 @@ describe('task schemas', () => {
 });
 
 describe('design-system tokens', () => {
-  it('conserve la palette de la maquette dans apps/web', () => {
+  it('conserve la palette de la maquette dans le frontend', () => {
     const tokensPath = path.resolve(
       path.dirname(fileURLToPath(import.meta.url)),
-      '../../../../web/src/theme/tokens.js',
+      '../../../../../src/theme/tokens.js',
     );
     const source = readFileSync(tokensPath, 'utf8');
 

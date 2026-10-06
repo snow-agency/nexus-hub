@@ -1,10 +1,17 @@
+import { useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
+import * as Dialog from '@radix-ui/react-dialog';
 import { AppSidebar } from '../../components/layout/AppSidebar.jsx';
 import { Card } from '../../components/ui/Card';
 import { Button } from '../../components/ui/Button';
-import { Bell, Plus, Calendar } from 'lucide-react';
+import { Bell, Plus, Calendar, X } from 'lucide-react';
 
 export function OrganizationPage() {
+  const [isTaskDialogOpen, setIsTaskDialogOpen] = useState(false);
+  const [newTasks, setNewTasks] = useState([]);
+  const [taskTitle, setTaskTitle] = useState('');
+  const [taskCategory, setTaskCategory] = useState('Marketing');
+  const [taskDueDate, setTaskDueDate] = useState('');
   const [searchParams, setSearchParams] = useSearchParams();
   const filterByParam = {
     todo: 'À faire',
@@ -21,6 +28,21 @@ export function OrganizationPage() {
   function setFilter(nextFilter) {
     const nextParam = paramByFilter[nextFilter];
     setSearchParams(nextParam ? { filter: nextParam } : {}, { replace: true });
+  }
+
+  function handleTaskSubmit(event) {
+    event.preventDefault();
+    const title = taskTitle.trim();
+    if (!title) return;
+
+    setNewTasks((previousTasks) => [
+      { id: Date.now(), title, category: taskCategory, dueDate: taskDueDate || 'À planifier' },
+      ...previousTasks,
+    ]);
+    setTaskTitle('');
+    setTaskCategory('Marketing');
+    setTaskDueDate('');
+    setIsTaskDialogOpen(false);
   }
 
   const avatarUrl =
@@ -63,9 +85,100 @@ export function OrganizationPage() {
                 Planifie, attribue et avance sans perdre de vue les blocages.
               </p>
             </div>
-            <Button className="bg-[#FF9900] hover:bg-[#e08700] text-black font-bold px-5 py-2.5 rounded-full flex items-center gap-2 self-start shadow-sm">
-              <Plus size={18} strokeWidth={2.5} /> Nouvelle tâche
-            </Button>
+            <Dialog.Root open={isTaskDialogOpen} onOpenChange={setIsTaskDialogOpen}>
+              <Dialog.Trigger asChild>
+                <button
+                  className="flex items-center gap-2 self-start rounded-full bg-[#FF9900] px-5 py-2.5 font-bold text-black shadow-sm transition-colors hover:bg-[#e08700]"
+                  type="button"
+                >
+                  <Plus size={18} strokeWidth={2.5} /> Nouvelle tâche
+                </button>
+              </Dialog.Trigger>
+              <Dialog.Portal>
+                <Dialog.Overlay className="fixed inset-0 z-40 bg-[#18181B]/40 backdrop-blur-[1px]" />
+                <Dialog.Content className="fixed left-1/2 top-1/2 z-50 max-h-[calc(100dvh-2rem)] w-[calc(100%-2rem)] max-w-lg -translate-x-1/2 -translate-y-1/2 overflow-y-auto rounded-2xl border border-gray-200 bg-white p-6 shadow-xl focus:outline-none sm:p-7">
+                  <div className="flex items-start justify-between gap-4">
+                    <div>
+                      <Dialog.Title className="text-lg font-extrabold text-gray-900">
+                        Nouvelle tâche
+                      </Dialog.Title>
+                      <Dialog.Description className="mt-1 text-sm text-gray-600">
+                        Ajoute une priorité à la liste « À faire ».
+                      </Dialog.Description>
+                    </div>
+                    <Dialog.Close asChild>
+                      <button
+                        aria-label="Fermer"
+                        className="rounded-full p-2 text-gray-500 transition-colors hover:bg-gray-100 hover:text-gray-900"
+                        type="button"
+                      >
+                        <X aria-hidden="true" size={18} />
+                      </button>
+                    </Dialog.Close>
+                  </div>
+
+                  <form className="mt-6 space-y-4" onSubmit={handleTaskSubmit}>
+                    <label className="block space-y-1.5">
+                      <span className="text-sm font-semibold text-gray-800">Intitulé</span>
+                      <input
+                        autoFocus
+                        className="h-11 w-full rounded-lg border border-gray-300 bg-white px-3 text-sm text-gray-900 outline-none focus:border-[#005C46] focus:ring-2 focus:ring-[#005C46]/10"
+                        maxLength={120}
+                        onChange={(event) => setTaskTitle(event.target.value)}
+                        placeholder="Ex. Préparer la campagne de lancement"
+                        required
+                        value={taskTitle}
+                      />
+                    </label>
+
+                    <div className="grid gap-4 sm:grid-cols-2">
+                      <label className="block space-y-1.5">
+                        <span className="text-sm font-semibold text-gray-800">Catégorie</span>
+                        <select
+                          className="h-11 w-full rounded-lg border border-gray-300 bg-white px-3 text-sm text-gray-900 outline-none focus:border-[#005C46] focus:ring-2 focus:ring-[#005C46]/10"
+                          onChange={(event) => setTaskCategory(event.target.value)}
+                          value={taskCategory}
+                        >
+                          {['Marketing', 'Achats', 'Équipe', 'Produit', 'Logistique', 'Autre'].map(
+                            (category) => (
+                              <option key={category} value={category}>
+                                {category}
+                              </option>
+                            ),
+                          )}
+                        </select>
+                      </label>
+                      <label className="block space-y-1.5">
+                        <span className="text-sm font-semibold text-gray-800">Échéance</span>
+                        <input
+                          className="h-11 w-full rounded-lg border border-gray-300 bg-white px-3 text-sm text-gray-900 outline-none focus:border-[#005C46] focus:ring-2 focus:ring-[#005C46]/10"
+                          onChange={(event) => setTaskDueDate(event.target.value)}
+                          type="date"
+                          value={taskDueDate}
+                        />
+                      </label>
+                    </div>
+
+                    <div className="flex justify-end gap-2 border-t border-gray-100 pt-4">
+                      <Dialog.Close asChild>
+                        <button
+                          className="rounded-lg border border-gray-300 px-4 py-2.5 text-sm font-semibold text-gray-700 transition-colors hover:bg-gray-50"
+                          type="button"
+                        >
+                          Annuler
+                        </button>
+                      </Dialog.Close>
+                      <button
+                        className="rounded-lg bg-[#FF9900] px-4 py-2.5 text-sm font-bold text-gray-900 transition-colors hover:bg-[#e08700]"
+                        type="submit"
+                      >
+                        Ajouter la tâche
+                      </button>
+                    </div>
+                  </form>
+                </Dialog.Content>
+              </Dialog.Portal>
+            </Dialog.Root>
           </div>
 
           {/* FILTRES DE STATUT */}
@@ -95,11 +208,10 @@ export function OrganizationPage() {
                 <div className="flex justify-between items-center pb-1">
                   <h3 className="font-extrabold text-sm text-gray-900">À faire</h3>
                   <span className="w-5 h-5 rounded-full bg-[#F7F5F0] text-gray-500 text-xs font-bold flex items-center justify-center">
-                    2
+                    {2 + newTasks.length}
                   </span>
                 </div>
 
-                {/* Tâche 1 */}
                 <div className="p-4 bg-[#F7F5F0] rounded-2xl space-y-3">
                   <span className="inline-block px-2.5 py-0.5 rounded-full bg-[#FFE8C2] text-[#B86E00] text-[10px] font-bold">
                     Prioritaire
@@ -120,7 +232,6 @@ export function OrganizationPage() {
                   </div>
                 </div>
 
-                {/* Tâche 2 */}
                 <div className="p-4 bg-[#F7F5F0] rounded-2xl space-y-3">
                   <span className="inline-block px-2.5 py-0.5 rounded-full bg-[#FFE8C2] text-[#B86E00] text-[10px] font-bold">
                     Marketing
@@ -140,6 +251,19 @@ export function OrganizationPage() {
                     />
                   </div>
                 </div>
+
+                {newTasks.map((task) => (
+                  <div key={task.id} className="space-y-3 rounded-2xl bg-[#F7F5F0] p-4">
+                    <span className="inline-block rounded-full bg-[#FFE8C2] px-2.5 py-0.5 text-[10px] font-bold text-[#B86E00]">
+                      {task.category}
+                    </span>
+                    <p className="text-xs font-bold leading-snug text-gray-900">{task.title}</p>
+                    <div className="flex items-center gap-1.5 pt-2 text-[10px] font-medium text-gray-400">
+                      <Calendar size={12} />
+                      <span>{task.dueDate}</span>
+                    </div>
+                  </div>
+                ))}
               </Card>
             )}
 
