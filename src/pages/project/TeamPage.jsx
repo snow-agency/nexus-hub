@@ -1,17 +1,5 @@
-import React from 'react';
-import { 
-  Plus, 
-  MessageSquare,
-  LayoutDashboard,
-  Folder,
-  Kanban,
-  CreditCard,
-  Compass,
-  Users,
-  BarChart3,
-  Globe,
-  Bell
-} from 'lucide-react';
+import { AppSidebar } from '../../components/layout/AppSidebar.jsx';
+import { Plus, Bell } from 'lucide-react';
 
 export default function TeamPage() {
   const members = [
@@ -42,58 +30,12 @@ export default function TeamPage() {
   ];
 
   return (
-    <div className="flex min-h-screen bg-[#F8F5EE] text-[#1E2923] font-sans">
-      
-      {/* SIDEBAR LEFT */}
-      <aside className="w-64 border-r border-[#E8E2D5] p-6 flex flex-col justify-between bg-[#F8F5EE]">
-        <div>
-          {/* Logo & Header */}
-          <div className="flex items-center gap-3 mb-8">
-            <div className="w-10 h-10 rounded-full bg-[#1E2923] text-white flex items-center justify-center font-bold text-lg">
-              N
-            </div>
-            <div>
-              <h1 className="font-bold text-base leading-tight">Nexus Hub</h1>
-              <p className="text-xs text-gray-500">Votre cap entrepreneurial</p>
-            </div>
-          </div>
-
-          {/* Active Project */}
-          <div className="mb-8">
-            <p className="text-xs text-gray-400 font-medium uppercase tracking-wider mb-1">Projet actif</p>
-            <h2 className="font-bold text-base">MomoFood</h2>
-            <p className="text-xs text-gray-500 mb-2">Resto-livraison · Lomé</p>
-            <span className="inline-block px-2.5 py-0.5 text-[11px] bg-emerald-100 text-emerald-700 rounded-full font-medium">
-              Phase · Lancement
-            </span>
-          </div>
-
-          {/* Navigation Links */}
-          <nav className="space-y-1">
-            <NavItem icon={<LayoutDashboard size={18} />} label="Vue d'ensemble" />
-            <NavItem icon={<Folder size={18} />} label="Mon projet" />
-            <NavItem icon={<Kanban size={18} />} label="Organisation" />
-            <NavItem icon={<CreditCard size={18} />} label="Finance" />
-            <NavItem icon={<Compass size={18} />} label="Stratégie" />
-            <NavItem icon={<Users size={18} />} label="Équipe" active />
-            <NavItem icon={<BarChart3 size={18} />} label="Performance" />
-            <NavItem icon={<Globe size={18} />} label="Réseau" />
-          </nav>
-        </div>
-
-        {/* Copilot Card */}
-        <div className="bg-[#1E2923] text-white p-4 rounded-2xl space-y-3">
-          <p className="text-xs text-gray-300">Besoin d'un éclairage ?</p>
-          <p className="text-sm font-semibold leading-snug">Demandez à votre copilote.</p>
-          <button className="w-full py-2 bg-[#E69D00] hover:bg-[#d18e00] text-[#1E2923] font-semibold text-xs rounded-xl flex items-center justify-center gap-2 transition-colors">
-            <MessageSquare size={14} />
-            Discuter
-          </button>
-        </div>
-      </aside>
+    <div className="min-h-screen bg-[#F7F5F0] flex text-gray-900 font-sans p-4 md:p-6">
+      <div className="max-w-[1440px] mx-auto w-full flex gap-6">
+      <AppSidebar activePage="team" />
 
       {/* MAIN CONTENT AREA */}
-      <main className="flex-1 flex flex-col">
+      <main className="flex-1 flex flex-col min-w-0">
         
         {/* HEADER TOP */}
         <header className="px-10 py-5 flex items-center justify-end gap-4">
@@ -115,7 +57,7 @@ export default function TeamPage() {
         </header>
 
         {/* PAGE CONTENT */}
-        <div className="px-10 py-4 flex-1 max-w-6xl space-y-6">
+        <div className="px-2 py-4 flex-1 max-w-6xl space-y-6">
           
           {/* Header Title Section */}
           <div className="flex justify-between items-start">
@@ -189,22 +131,7 @@ export default function TeamPage() {
         </div>
       </main>
 
+      </div>
     </div>
-  );
-}
-
-{/* Helper component for Nav Items */}
-function NavItem({ icon, label, active = false }) {
-  return (
-    <button
-      className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-medium transition-colors ${
-        active 
-          ? 'bg-[#1E2923] text-white' 
-          : 'text-gray-600 hover:bg-[#E8E2D5]/40 hover:text-[#1E2923]'
-      }`}
-    >
-      {icon}
-      <span>{label}</span>
-    </button>
   );
 }

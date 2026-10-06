@@ -9,6 +9,7 @@ import { FinancePage } from './pages/project/FinancePage.jsx'
 import StrategyPage from './pages/project/Strategy.jsx'
 import PerformancePage from './pages/project/PerformancePage.jsx'
 import NetworkPage from './pages/project/NetworkPage.jsx'
+import TeamPage from './pages/project/TeamPage.jsx'
 
 const AUTH_STORAGE_KEY = 'nexusHubAuthenticated'
 
@@ -81,6 +82,14 @@ export default function App() {
           element={
             <RequireAuth>
               <NetworkPage />
+            </RequireAuth>
+          }
+        />
+        <Route
+          path="/team"
+          element={
+            <RequireAuth>
+              <TeamPage />
             </RequireAuth>
           }
         />

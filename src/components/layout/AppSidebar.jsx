@@ -23,7 +23,7 @@ const navigationItems = [
   { id: 'organization', label: 'Organisation', icon: Layers, to: '/organization' },
   { id: 'finance', label: 'Finance', icon: Coins, to: '/finance' },
   { id: 'strategy', label: 'Stratégie', icon: Target, to: '/strategy' },
-  { label: 'Équipe', icon: Users },
+  { id: 'team', label: 'Équipe', icon: Users, to: '/team' },
   { id: 'performance', label: 'Performance', icon: TrendingUp, to: '/performance' },
   { id: 'network', label: 'Réseau', icon: Globe, to: '/network' },
 ]
