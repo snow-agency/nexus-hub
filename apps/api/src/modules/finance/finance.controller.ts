@@ -3,6 +3,7 @@ import { prisma } from '../../db/prisma.js';
 import { createTransactionSchema } from './finance.schema.js';
 import { computeFinanceSummary } from './finance.utils.js';
 import { AuthRequest } from '../../middlewares/auth.middleware.js';
+import { TRANSACTION_CATEGORIES } from './finance.schema.js';
 
 export async function createTransaction(req: AuthRequest, res: Response) {
   const result = createTransactionSchema.safeParse(req.body);
@@ -54,4 +55,8 @@ export async function listTransactions(req: AuthRequest, res: Response) {
     transactions,
     ...computeFinanceSummary(transactions, Number(project.budgetTotal)),
   });
+}
+
+export async function listCategories(_req: AuthRequest, res: Response) {
+  res.json({ categories: TRANSACTION_CATEGORIES });
 }
