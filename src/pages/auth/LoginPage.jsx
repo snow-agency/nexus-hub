@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { ArrowRight, LockKeyhole, Mail, Sparkles } from 'lucide-react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext.jsx';
+import { getApiErrorMessage } from '../../services/api.js';
 
 export default function LoginPage() {
   const navigate = useNavigate();
@@ -26,7 +27,7 @@ export default function LoginPage() {
         replace: true,
       });
     } catch (error) {
-      setError(error.response?.data?.error || 'Une erreur est survenue. Veuillez réessayer.');
+      setError(getApiErrorMessage(error));
     } finally {
       setIsLoading(false);
     }
