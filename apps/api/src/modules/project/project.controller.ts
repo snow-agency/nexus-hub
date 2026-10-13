@@ -1,6 +1,6 @@
 import { Response } from 'express';
 import { prisma } from '../../db/prisma.js';
-import { createProjectSchema } from './project.schema.js';
+import { createProjectSchema, updateProjectSchema } from './project.schema.js';
 import { AuthRequest } from '../../middlewares/auth.middleware.js';
 
 export async function createProject(req: AuthRequest, res: Response) {
@@ -45,6 +45,31 @@ export async function getProject(req: AuthRequest, res: Response) {
   if (!project) {
     return res.status(404).json({ error: 'Projet introuvable.' });
   }
+
+  res.json(project);
+}
+
+export async function updateProject(req: AuthRequest, res: Response) {
+  const result = updateProjectSchema.safeParse(req.body);
+
+  if (!result.success) {
+    return res.status(400).json({ error: result.error.issues[0].message });
+  }
+
+  const { id } = req.params;
+
+  const existing = await prisma.project.findFirst({
+    where: { id, userId: req.userId as string },
+  });
+
+  if (!existing) {
+    return res.status(404).json({ error: 'Projet introuvable.' });
+  }
+
+  const project = await prisma.project.update({
+    where: { id },
+    data: result.data,
+  });
 
   res.json(project);
 }
