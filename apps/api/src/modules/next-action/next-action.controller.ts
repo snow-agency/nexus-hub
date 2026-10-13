@@ -6,6 +6,7 @@ import { pickPrioritySignal } from '../rules-engine/arbitration.js';
 import { buildPrompt } from './prompt-builder.js';
 import { parseNextAction } from './response-parser.js';
 import { askClaude } from './ai-client.js';
+import { updateNextActionStatusSchema } from './next-action.schema.js';
 
 export async function generateNextAction(req: AuthRequest, res: Response) {
   const { projectId } = req.params;
@@ -41,4 +42,29 @@ export async function generateNextAction(req: AuthRequest, res: Response) {
   });
 
   res.status(201).json(nextAction);
+}
+
+export async function updateNextActionStatus(req: AuthRequest, res: Response) {
+  const result = updateNextActionStatusSchema.safeParse(req.body);
+
+  if (!result.success) {
+    return res.status(400).json({ error: result.error.issues[0].message });
+  }
+
+  const { id } = req.params;
+
+  const existing = await prisma.nextAction.findFirst({
+    where: { id, project: { userId: req.userId as string } },
+  });
+
+  if (!existing) {
+    return res.status(404).json({ error: 'Next Action introuvable.' });
+  }
+
+  const updated = await prisma.nextAction.update({
+    where: { id },
+    data: { status: result.data.status },
+  });
+
+  res.json(updated);
 }
