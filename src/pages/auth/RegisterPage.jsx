@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { ArrowLeft, ArrowRight, LockKeyhole, Mail, Sparkles, UserRound } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext.jsx';
+import { getApiErrorMessage } from '../../services/api.js';
 
 export default function RegisterPage() {
   const navigate = useNavigate();
@@ -32,7 +33,7 @@ export default function RegisterPage() {
 
       navigate('/dashboard', { replace: true });
     } catch (error) {
-      setError(error.response?.data?.error || 'Une erreur est survenue. Veuillez réessayer.');
+      setError(getApiErrorMessage(error));
     } finally {
       setIsLoading(false);
     }

@@ -16,3 +16,16 @@ export function setAuthToken(token) {
     delete api.defaults.headers.common.Authorization;
   }
 }
+
+export function getApiErrorMessage(
+  error,
+  fallback = 'Une erreur est survenue. Veuillez réessayer.',
+) {
+  if (!error?.response) {
+    return 'Impossible de joindre le serveur. Veuillez réessayer plus tard.';
+  }
+
+  const message = error.response.data?.error;
+
+  return typeof message === 'string' && message ? message : fallback;
+}
