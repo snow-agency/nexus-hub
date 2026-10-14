@@ -77,9 +77,9 @@ export function HomePage() {
           </a>
         </nav>
         <div className="flex items-center gap-3">
-          <a href="/auth" className="text-sm font-medium text-gray-700 hover:text-black px-3 py-2">
+          <Link to="/auth" className="text-sm font-medium text-gray-700 hover:text-black px-3 py-2">
             Se connecter
-          </a>
+          </Link>
           <Link
             to="/register"
             className="rounded-lg bg-[#FFB800] px-5 py-2 text-sm font-semibold text-black transition-colors hover:bg-[#E0A200]"
