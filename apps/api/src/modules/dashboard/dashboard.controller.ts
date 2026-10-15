@@ -12,12 +12,20 @@ async function ensureNextAction(projectId: string, signal: { id: string; type: s
     return null;
   }
 
-  const existing = await prisma.nextAction.findFirst({
-    where: { projectId, signalId: signal.id, status: 'PROPOSEE' },
+  const existing = await prisma.nextAction.findMany({
+    where: { projectId, signalId: signal.id },
+    orderBy: { createdAt: 'desc' },
   });
 
-  if (existing) {
-    return existing;
+  const proposed = existing.find((action) => action.status === 'PROPOSEE');
+
+  if (proposed) {
+    return proposed;
+  }
+
+  if (existing.length > 0) {
+    // Déjà traitée (faite ou ignorée) pour ce signal : on ne la repropose pas.
+    return null;
   }
 
   const draft = draftNextAction(signal);
