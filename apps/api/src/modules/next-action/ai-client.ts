@@ -35,7 +35,28 @@ async function askGoogle(prompt: string): Promise<string> {
   return result.response.text();
 }
 
-export async function askClaude(prompt: string): Promise<string> {
+function wait(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+async function askGoogleWithRetry(prompt: string): Promise<string> {
+  try {
+    return await askGoogle(prompt);
+  } catch (err) {
+    console.log(
+      'Google AI Studio a échoué, nouvel essai dans 2 secondes.',
+      err instanceof Error ? err.message : err,
+    );
+    await wait(2000);
+    return askGoogle(prompt);
+  }
+}
+
+/**
+ * Renvoie le texte de l'IA, ou null si aucune IA n'est disponible.
+ * Le contrôleur décide alors quoi faire (garder le texte existant).
+ */
+export async function askClaude(prompt: string): Promise<string | null> {
   try {
     return await askAnthropic(prompt);
   } catch (err) {
@@ -46,13 +67,11 @@ export async function askClaude(prompt: string): Promise<string> {
   }
 
   try {
-    return await askGoogle(prompt);
+    return await askGoogleWithRetry(prompt);
   } catch (err) {
     console.log('Google AI Studio indisponible aussi.', err instanceof Error ? err.message : err);
   }
 
-  console.log('Aucune IA disponible : réponse simulée utilisée (mode test).');
-  return `Titre : Vérifier la situation détectée
-Raison : Un signal a été détecté sur ce projet et nécessite ton attention.
-Impact : Permet d'éviter que le problème ne s'aggrave.`;
+  console.log('Aucune IA disponible : le texte existant est conservé.');
+  return null;
 }

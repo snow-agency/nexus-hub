@@ -26,11 +26,52 @@ export async function generateNextAction(req: AuthRequest, res: Response) {
     return res.json({ nextAction: null, message: "Aucun problème détecté pour l'instant." });
   }
 
+  const existing = await prisma.nextAction.findMany({
+    where: { projectId, signalId: signal.id },
+    orderBy: { createdAt: 'desc' },
+  });
+
+  const proposed = existing.find((action) => action.status === 'PROPOSEE');
+
+  if (!proposed && existing.length > 0) {
+    return res.json({
+      nextAction: null,
+      message: 'La recommandation pour ce problème a déjà été traitée.',
+    });
+  }
+
   const prompt = buildPrompt(project, signal);
   const rawResponse = await askClaude(prompt);
+
+  if (rawResponse === null) {
+    if (proposed) {
+      return res.json({
+        nextAction: proposed,
+        message: "L'IA est indisponible : le texte existant est conservé.",
+      });
+    }
+
+    return res.status(503).json({
+      error: "L'IA est indisponible, réessaie dans un instant.",
+    });
+  }
+
   const parsed = parseNextAction(rawResponse);
 
-  const nextAction = await prisma.nextAction.create({
+  if (proposed) {
+    const updated = await prisma.nextAction.update({
+      where: { id: proposed.id },
+      data: {
+        title: parsed.title,
+        reason: parsed.reason,
+        impact: parsed.impact,
+      },
+    });
+
+    return res.json(updated);
+  }
+
+  const created = await prisma.nextAction.create({
     data: {
       projectId,
       signalId: signal.id,
@@ -41,7 +82,7 @@ export async function generateNextAction(req: AuthRequest, res: Response) {
     },
   });
 
-  res.status(201).json(nextAction);
+  return res.status(201).json(created);
 }
 
 export async function updateNextActionStatus(req: AuthRequest, res: Response) {
@@ -66,5 +107,5 @@ export async function updateNextActionStatus(req: AuthRequest, res: Response) {
     data: { status: result.data.status },
   });
 
-  res.json(updated);
+  return res.json(updated);
 }
