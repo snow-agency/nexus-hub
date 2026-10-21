@@ -1,4 +1,5 @@
 import { Response } from 'express';
+import type { NextAction } from '@prisma/client';
 import { prisma } from '../../db/prisma.js';
 import { AuthRequest } from '../../middlewares/auth.middleware.js';
 import { runDetection } from '../rules-engine/rules-engine.service.js';
@@ -6,8 +7,14 @@ import { pickPrioritySignal } from '../rules-engine/arbitration.js';
 import { draftNextAction } from '../rules-engine/next-action.js';
 import { computeTaskProgress } from './progression.js';
 import { computeFinanceSummary } from '../finance/finance.utils.js';
+import { GUIDANCE, GUIDANCE_KINDS, pendingGuidanceKinds, type GuidanceKind } from './guidance.js';
 
-async function ensureNextAction(projectId: string, signal: { id: string; type: string } | null) {
+type NextActionView = NextAction & { kind: 'SIGNAL' | GuidanceKind };
+
+async function ensureNextAction(
+  projectId: string,
+  signal: { id: string; type: string } | null,
+): Promise<NextActionView | null> {
   if (!signal) {
     return null;
   }
@@ -20,7 +27,7 @@ async function ensureNextAction(projectId: string, signal: { id: string; type: s
   const proposed = existing.find((action) => action.status === 'PROPOSEE');
 
   if (proposed) {
-    return proposed;
+    return { ...proposed, kind: 'SIGNAL' };
   }
 
   if (existing.length > 0) {
@@ -30,7 +37,7 @@ async function ensureNextAction(projectId: string, signal: { id: string; type: s
 
   const draft = draftNextAction(signal);
 
-  return prisma.nextAction.create({
+  const created = await prisma.nextAction.create({
     data: {
       projectId,
       signalId: signal.id,
@@ -39,6 +46,54 @@ async function ensureNextAction(projectId: string, signal: { id: string; type: s
       status: 'PROPOSEE',
     },
   });
+
+  return { ...created, kind: 'SIGNAL' };
+}
+
+async function ensureGuidance(
+  projectId: string,
+  state: { budgetTotal: number; tasksCount: number },
+): Promise<NextActionView | null> {
+  const pending = pendingGuidanceKinds(state);
+
+  // Si l'utilisateur a fait ce qui était demandé, l'action passe à "faite".
+  for (const kind of GUIDANCE_KINDS) {
+    if (!pending.includes(kind)) {
+      await prisma.nextAction.updateMany({
+        where: { projectId, signalId: null, title: GUIDANCE[kind].title, status: 'PROPOSEE' },
+        data: { status: 'FAITE' },
+      });
+    }
+  }
+
+  for (const kind of pending) {
+    const content = GUIDANCE[kind];
+
+    const existing = await prisma.nextAction.findFirst({
+      where: { projectId, signalId: null, title: content.title },
+      orderBy: { createdAt: 'desc' },
+    });
+
+    if (!existing) {
+      const created = await prisma.nextAction.create({
+        data: {
+          projectId,
+          title: content.title,
+          reason: content.reason,
+          impact: content.impact,
+          status: 'PROPOSEE',
+        },
+      });
+      return { ...created, kind };
+    }
+
+    if (existing.status === 'PROPOSEE') {
+      return { ...existing, kind };
+    }
+    // Déjà traitée ou ignorée : on passe à la suivante.
+  }
+
+  return null;
 }
 
 export async function getDashboard(req: AuthRequest, res: Response) {
@@ -58,7 +113,13 @@ export async function getDashboard(req: AuthRequest, res: Response) {
 
   const signaux = await runDetection(projectId);
   const signalPrioritaire = pickPrioritySignal(signaux);
-  const nextAction = await ensureNextAction(projectId, signalPrioritaire);
+
+  const nextAction =
+    (await ensureNextAction(projectId, signalPrioritaire)) ??
+    (await ensureGuidance(projectId, {
+      budgetTotal: Number(project.budgetTotal),
+      tasksCount: tasks.length,
+    }));
 
   res.json({
     project: {
