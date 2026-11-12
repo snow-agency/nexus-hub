@@ -1,6 +1,7 @@
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext.jsx';
 import { ProjectProvider } from './context/ProjectContext.jsx';
+import { ChatProvider } from './context/ChatContext.jsx';
 import ProtectedRoute from './components/auth/ProtectedRoute.jsx';
 import RequireProject from './components/auth/RequireProject.jsx';
 import LoginPage from './pages/auth/LoginPage.jsx';
@@ -20,32 +21,34 @@ export default function App() {
   return (
     <AuthProvider>
       <ProjectProvider>
-        <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<HomePage />} />
+        <ChatProvider>
+          <BrowserRouter>
+            <Routes>
+              <Route path="/" element={<HomePage />} />
 
-            <Route path="/auth" element={<LoginPage />} />
+              <Route path="/auth" element={<LoginPage />} />
 
-            <Route path="/register" element={<RegisterPage />} />
+              <Route path="/register" element={<RegisterPage />} />
 
-            <Route element={<ProtectedRoute />}>
-              <Route path="/onboarding" element={<OnboardingPage />} />
+              <Route element={<ProtectedRoute />}>
+                <Route path="/onboarding" element={<OnboardingPage />} />
 
-              <Route element={<RequireProject />}>
-                <Route path="/dashboard" element={<DashboardPage />} />
-                <Route path="/project" element={<ProjectPage />} />
-                <Route path="/organization" element={<OrganizationPage />} />
-                <Route path="/finance" element={<FinancePage />} />
-                <Route path="/strategy" element={<StrategyPage />} />
-                <Route path="/performance" element={<PerformancePage />} />
-                <Route path="/network" element={<NetworkPage />} />
-                <Route path="/team" element={<TeamPage />} />
+                <Route element={<RequireProject />}>
+                  <Route path="/dashboard" element={<DashboardPage />} />
+                  <Route path="/project" element={<ProjectPage />} />
+                  <Route path="/organization" element={<OrganizationPage />} />
+                  <Route path="/finance" element={<FinancePage />} />
+                  <Route path="/strategy" element={<StrategyPage />} />
+                  <Route path="/performance" element={<PerformancePage />} />
+                  <Route path="/network" element={<NetworkPage />} />
+                  <Route path="/team" element={<TeamPage />} />
+                </Route>
               </Route>
-            </Route>
 
-            <Route path="*" element={<Navigate to="/" replace />} />
-          </Routes>
-        </BrowserRouter>
+              <Route path="*" element={<Navigate to="/" replace />} />
+            </Routes>
+          </BrowserRouter>
+        </ChatProvider>
       </ProjectProvider>
     </AuthProvider>
   );

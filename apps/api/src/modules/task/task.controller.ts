@@ -1,7 +1,13 @@
 import { Response } from 'express';
 import { prisma } from '../../db/prisma.js';
-import { createTaskSchema, updateTaskStatusSchema } from './task.schema.js';
+import {
+  createTaskSchema,
+  updateTaskStatusSchema,
+  updateTaskAssigneeSchema,
+} from './task.schema.js';
 import { AuthRequest } from '../../middlewares/auth.middleware.js';
+
+const withAssignee = { assignee: { select: { id: true, name: true } } };
 
 export async function createTask(req: AuthRequest, res: Response) {
   const result = createTaskSchema.safeParse(req.body);
@@ -10,7 +16,7 @@ export async function createTask(req: AuthRequest, res: Response) {
     return res.status(400).json({ error: result.error.issues[0].message });
   }
 
-  const { projectId, title, dueDate } = result.data;
+  const { projectId, title, dueDate, assigneeId } = result.data;
 
   const project = await prisma.project.findFirst({
     where: { id: projectId, userId: req.userId as string },
@@ -20,12 +26,22 @@ export async function createTask(req: AuthRequest, res: Response) {
     return res.status(404).json({ error: 'Projet introuvable.' });
   }
 
+  if (assigneeId) {
+    const member = await prisma.teamMember.findFirst({ where: { id: assigneeId, projectId } });
+
+    if (!member) {
+      return res.status(400).json({ error: "Ce membre n'appartient pas à ce projet." });
+    }
+  }
+
   const task = await prisma.task.create({
     data: {
       projectId,
       title,
       dueDate: dueDate ? new Date(dueDate) : undefined,
+      assigneeId,
     },
+    include: withAssignee,
   });
 
   res.status(201).json(task);
@@ -45,6 +61,7 @@ export async function listTasks(req: AuthRequest, res: Response) {
   const tasks = await prisma.task.findMany({
     where: { projectId },
     orderBy: { createdAt: 'desc' },
+    include: withAssignee,
   });
 
   res.json(tasks);
@@ -73,6 +90,43 @@ export async function updateTaskStatus(req: AuthRequest, res: Response) {
   const updated = await prisma.task.update({
     where: { id: taskId },
     data: { status: result.data.status },
+  });
+
+  res.json(updated);
+}
+
+export async function updateTaskAssignee(req: AuthRequest, res: Response) {
+  const result = updateTaskAssigneeSchema.safeParse(req.body);
+
+  if (!result.success) {
+    return res.status(400).json({ error: result.error.issues[0].message });
+  }
+
+  const { taskId } = req.params;
+  const { assigneeId } = result.data;
+
+  const task = await prisma.task.findFirst({
+    where: { id: taskId, project: { userId: req.userId as string } },
+  });
+
+  if (!task) {
+    return res.status(404).json({ error: 'Tâche introuvable.' });
+  }
+
+  if (assigneeId) {
+    const member = await prisma.teamMember.findFirst({
+      where: { id: assigneeId, projectId: task.projectId },
+    });
+
+    if (!member) {
+      return res.status(400).json({ error: "Ce membre n'appartient pas à ce projet." });
+    }
+  }
+
+  const updated = await prisma.task.update({
+    where: { id: taskId },
+    data: { assigneeId },
+    include: withAssignee,
   });
 
   res.json(updated);
