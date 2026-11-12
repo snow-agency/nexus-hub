@@ -3,7 +3,9 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Card } from '../../components/ui/Card';
 import { Button } from '../../components/ui/Button';
 import { AppSidebar } from '../../components/layout/AppSidebar.jsx';
-import { useAuth } from '../../context/AuthContext.jsx';
+import { AppHeader } from '../../components/layout/AppHeader.jsx';
+import { ProposalCard } from '../../components/proposals/ProposalCard.jsx';
+import { useProposals } from '../../hooks/useProposals.js';
 import { useProject } from '../../context/ProjectContext.jsx';
 import { api, getApiErrorMessage } from '../../services/api.js';
 import {
@@ -48,8 +50,7 @@ const spaces = [
 
 export function DashboardPage() {
   const navigate = useNavigate();
-  const { user } = useAuth();
-  const { currentProjectId, projects, setCurrentProjectId } = useProject();
+  const { currentProjectId } = useProject();
 
   const [data, setData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -73,6 +74,8 @@ export function DashboardPage() {
     setIsLoading(true);
     loadDashboard();
   }, [loadDashboard]);
+
+  const proposals = useProposals(currentProjectId, { auto: true, onApplied: loadDashboard });
 
   async function handleMarkDone() {
     if (!data?.nextAction) return;
@@ -119,42 +122,13 @@ export function DashboardPage() {
       ? Math.min(100, Math.round((finance.totalDepenses / finance.budgetTotal) * 100))
       : 0;
 
-  const initials = (user?.name ?? '?')
-    .split(' ')
-    .map((part) => part[0])
-    .slice(0, 2)
-    .join('')
-    .toUpperCase();
-
   return (
     <div className="min-h-screen bg-bg-light flex text-gray-900 font-sans p-4 md:p-6">
       <div className="max-w-[1440px] mx-auto w-full flex gap-6">
         <AppSidebar activePage="dashboard" />
 
         <main className="flex-1 space-y-6 overflow-y-auto">
-          <header className="flex items-center justify-end gap-3">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/80 border border-gray-200/80 text-xs text-gray-600 font-medium">
-              <span className="w-2 h-2 rounded-full bg-success"></span>
-              Connecté
-            </div>
-            {projects.length > 1 ? (
-              <select
-                aria-label="Changer de projet"
-                className="px-3 py-1 rounded-full bg-white/80 border border-gray-200/80 text-xs font-semibold text-gray-700"
-                onChange={(event) => setCurrentProjectId(event.target.value)}
-                value={currentProjectId ?? ''}
-              >
-                {projects.map((p) => (
-                  <option key={p.id} value={p.id}>
-                    {p.name}
-                  </option>
-                ))}
-              </select>
-            ) : null}
-            <div className="w-8 h-8 rounded-full bg-dark flex items-center justify-center text-[11px] font-bold text-white">
-              {initials}
-            </div>
-          </header>
+          <AppHeader />
 
           {error && (
             <p aria-live="polite" className="text-xs font-medium text-red-700">
@@ -293,6 +267,69 @@ export function DashboardPage() {
               )}
             </div>
           </div>
+
+          <Card className="p-6 bg-white border border-gray-200/60 rounded-3xl shadow-sm space-y-4">
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <div className="flex items-center gap-2">
+                <Sparkles className="text-accent-hover" size={18} />
+                <h3 className="font-extrabold text-sm text-gray-900">
+                  Propositions de ton copilote
+                </h3>
+                {proposals.proposals.length > 0 && (
+                  <span className="w-5 h-5 rounded-full bg-accent/20 text-accent-hover text-xs font-extrabold flex items-center justify-center">
+                    {proposals.proposals.length}
+                  </span>
+                )}
+              </div>
+              <div className="flex items-center gap-2">
+                {proposals.proposals.length > 1 && (
+                  <button
+                    className="text-[11px] font-bold text-primary hover:underline disabled:opacity-60"
+                    disabled={proposals.busy}
+                    onClick={proposals.acceptAll}
+                    type="button"
+                  >
+                    Tout appliquer
+                  </button>
+                )}
+                <button
+                  className="text-[11px] font-bold text-gray-700 bg-bg-light px-3 py-1.5 rounded-full hover:bg-gray-200/60 disabled:opacity-60"
+                  disabled={proposals.busy}
+                  onClick={proposals.generate}
+                  type="button"
+                >
+                  {proposals.busy ? 'Analyse...' : 'Générer de nouvelles idées'}
+                </button>
+              </div>
+            </div>
+
+            {proposals.error && (
+              <p aria-live="polite" className="text-xs font-medium text-red-700">
+                {proposals.error}
+              </p>
+            )}
+
+            {proposals.isLoading && proposals.proposals.length === 0 ? (
+              <p className="text-xs text-gray-400">Ton copilote analyse ton projet...</p>
+            ) : proposals.proposals.length === 0 ? (
+              <p className="text-xs text-gray-400">
+                Aucune proposition en attente. Clique sur « Générer de nouvelles idées » pour une
+                analyse à jour.
+              </p>
+            ) : (
+              <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-3">
+                {proposals.proposals.map((proposal) => (
+                  <ProposalCard
+                    busy={proposals.busy}
+                    key={proposal.id}
+                    onAccept={proposals.accept}
+                    onReject={proposals.reject}
+                    proposal={proposal}
+                  />
+                ))}
+              </div>
+            )}
+          </Card>
 
           <div className="grid lg:grid-cols-12 gap-6">
             <Card className="lg:col-span-5 p-6 bg-white border border-gray-200/60 rounded-3xl shadow-sm space-y-4">

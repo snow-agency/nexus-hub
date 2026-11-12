@@ -2,6 +2,7 @@ import { createElement } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext.jsx';
 import { useProject } from '../../context/ProjectContext.jsx';
+import { useChat } from '../../context/ChatContext.jsx';
 import {
   Briefcase,
   Coins,
@@ -37,6 +38,7 @@ export function AppSidebar({ activePage }) {
   const navigate = useNavigate();
   const { logout } = useAuth();
   const { currentProject } = useProject();
+  const { openChat } = useChat();
 
   function handleLogout() {
     logout();
@@ -106,7 +108,11 @@ export function AppSidebar({ activePage }) {
         <div className="space-y-3 rounded-2xl bg-dark p-5 text-white">
           <p className="text-[11px] text-gray-400">Besoin d'un éclairage ?</p>
           <p className="text-sm font-extrabold leading-snug">Demandez à votre copilote.</p>
-          <Button className="flex w-full items-center justify-center gap-2 rounded-xl bg-accent py-2.5 text-xs font-bold text-black hover:bg-accent-hover">
+          <Button
+            onClick={openChat}
+            type="button"
+            className="flex w-full items-center justify-center gap-2 rounded-xl bg-accent py-2.5 text-xs font-bold text-black hover:bg-accent-hover"
+          >
             <MessageCircle size={15} /> Discuter
           </Button>
         </div>

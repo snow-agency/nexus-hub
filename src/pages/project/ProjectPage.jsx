@@ -4,7 +4,8 @@ import { Card } from '../../components/ui/Card';
 import { Button } from '../../components/ui/Button';
 import { useProject } from '../../context/ProjectContext.jsx';
 import { api, getApiErrorMessage } from '../../services/api.js';
-import { Check, Save, Sparkles } from 'lucide-react';
+import { BmcGrid } from '../../components/bmc/BmcGrid.jsx';
+import { Check, Save } from 'lucide-react';
 
 const PHASES = [
   { value: 'IDEE_VALIDATION', label: 'Idée validée' },
@@ -213,16 +214,7 @@ export function ProjectPage() {
             </Card>
           </div>
 
-          <Card className="p-6 bg-white border border-gray-200/60 rounded-3xl shadow-sm space-y-3">
-            <div className="flex items-center gap-2">
-              <Sparkles className="text-accent-hover" size={18} />
-              <h3 className="font-extrabold text-base text-gray-900">Business Model Canvas</h3>
-            </div>
-            <p className="text-xs text-gray-500 leading-relaxed max-w-xl">
-              Bientôt disponible : tu pourras structurer ta proposition de valeur, tes segments
-              clients, tes canaux et le reste de ton modèle économique directement ici.
-            </p>
-          </Card>
+          <BmcGrid projectId={currentProjectId} />
         </main>
       </div>
     </div>

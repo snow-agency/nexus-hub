@@ -10,6 +10,16 @@ import { Plus, Calendar, Check, X } from 'lucide-react';
 const FILTER_BY_PARAM = { todo: 'À faire', done: 'Terminé' };
 const PARAM_BY_FILTER = { 'À faire': 'todo', Terminé: 'done' };
 
+function initialsOf(name) {
+  return (name ?? '?')
+    .split(' ')
+    .filter(Boolean)
+    .map((part) => part[0])
+    .slice(0, 2)
+    .join('')
+    .toUpperCase();
+}
+
 function isOverdue(task) {
   return task.status === 'A_FAIRE' && task.dueDate && new Date(task.dueDate) < new Date();
 }
@@ -25,12 +35,18 @@ export function OrganizationPage() {
   const [isTaskDialogOpen, setIsTaskDialogOpen] = useState(false);
   const [taskTitle, setTaskTitle] = useState('');
   const [taskDueDate, setTaskDueDate] = useState('');
+  const [taskAssigneeId, setTaskAssigneeId] = useState('');
+  const [members, setMembers] = useState([]);
 
   const loadTasks = useCallback(async () => {
     if (!currentProjectId) return;
     try {
-      const response = await api.get(`/tasks/project/${currentProjectId}`);
-      setTasks(response.data);
+      const [tasksResponse, teamResponse] = await Promise.all([
+        api.get(`/tasks/project/${currentProjectId}`),
+        api.get(`/team/project/${currentProjectId}`),
+      ]);
+      setTasks(tasksResponse.data);
+      setMembers(teamResponse.data.members);
     } catch (loadError) {
       setError(getApiErrorMessage(loadError));
     } finally {
@@ -58,9 +74,11 @@ export function OrganizationPage() {
         projectId: currentProjectId,
         title,
         dueDate: taskDueDate ? new Date(taskDueDate).toISOString() : undefined,
+        assigneeId: taskAssigneeId || undefined,
       });
       setTaskTitle('');
       setTaskDueDate('');
+      setTaskAssigneeId('');
       setIsTaskDialogOpen(false);
       await loadTasks();
     } catch (submitError) {
@@ -75,6 +93,15 @@ export function OrganizationPage() {
       await loadTasks();
     } catch (toggleError) {
       setError(getApiErrorMessage(toggleError));
+    }
+  }
+
+  async function assignTask(task, assigneeId) {
+    try {
+      await api.patch(`/tasks/${task.id}/assignee`, { assigneeId: assigneeId || null });
+      await loadTasks();
+    } catch (assignError) {
+      setError(getApiErrorMessage(assignError));
     }
   }
 
@@ -112,6 +139,31 @@ export function OrganizationPage() {
               {isOverdue(task) ? 'En retard · ' : ''}
               {new Date(task.dueDate).toLocaleDateString('fr-FR')}
             </span>
+          </div>
+        )}
+        {members.length > 0 && (
+          <div className="flex items-center gap-2">
+            <span
+              aria-hidden="true"
+              className={`flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full text-[9px] font-bold ${
+                task.assignee ? 'bg-primary text-white' : 'bg-gray-200 text-gray-400'
+              }`}
+            >
+              {task.assignee ? initialsOf(task.assignee.name) : '–'}
+            </span>
+            <select
+              aria-label={`Assigner « ${task.title} »`}
+              className="min-w-0 flex-1 rounded-md border border-gray-200 bg-white px-2 py-1 text-[10px] text-gray-600"
+              onChange={(event) => assignTask(task, event.target.value)}
+              value={task.assigneeId ?? ''}
+            >
+              <option value="">Non assignée</option>
+              {members.map((member) => (
+                <option key={member.id} value={member.id}>
+                  {member.name}
+                </option>
+              ))}
+            </select>
           </div>
         )}
       </div>
@@ -198,6 +250,26 @@ export function OrganizationPage() {
                         value={taskDueDate}
                       />
                     </label>
+
+                    {members.length > 0 && (
+                      <label className="block space-y-1.5">
+                        <span className="text-sm font-semibold text-gray-800">
+                          Assignée à (optionnel)
+                        </span>
+                        <select
+                          className="h-11 w-full rounded-lg border border-gray-300 bg-white px-3 text-sm text-gray-900 outline-none focus:border-primary focus:ring-2 focus:ring-primary/10"
+                          onChange={(event) => setTaskAssigneeId(event.target.value)}
+                          value={taskAssigneeId}
+                        >
+                          <option value="">Non assignée</option>
+                          {members.map((member) => (
+                            <option key={member.id} value={member.id}>
+                              {member.name}
+                            </option>
+                          ))}
+                        </select>
+                      </label>
+                    )}
 
                     <div className="flex justify-end gap-2 border-t border-gray-100 pt-4">
                       <Dialog.Close asChild>
