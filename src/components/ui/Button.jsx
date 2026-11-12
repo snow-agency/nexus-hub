@@ -1,11 +1,11 @@
 export function Button({ variant = 'primary', children, className = '', ...props }) {
   const variantClasses = {
     accent:
-      'h-[62px] rounded-[20px] bg-[#F5A000] px-8 text-xl font-normal text-[#14241E] shadow-[0_8px_18px_rgba(173,108,0,0.12)] hover:bg-[#E39600]',
+      'h-[62px] rounded-[20px] bg-accent px-8 text-xl font-normal text-dark shadow-[0_8px_18px_rgba(173,108,0,0.12)] hover:bg-accent-hover',
     outline:
-      'h-[62px] rounded-[20px] border border-[#DED9CD] bg-white/80 px-8 text-xl font-normal text-[#1D2B27] hover:bg-white',
+      'h-[62px] rounded-[20px] border border-bg-light bg-white/80 px-8 text-xl font-normal text-dark hover:bg-white',
     login:
-      'h-11 w-full rounded-lg bg-[#F5A000] px-4 text-sm font-medium text-[#14241E] shadow-sm hover:bg-[#E39600]',
+      'h-11 w-full rounded-lg bg-accent px-4 text-sm font-medium text-dark shadow-sm hover:bg-accent-hover',
     primary: 'rounded-md bg-primary text-white hover:bg-primary-hover',
   }[variant];
 

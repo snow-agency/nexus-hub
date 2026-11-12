@@ -1,6 +1,7 @@
 # Dependencies
 node_modules/
 node_modules_broken/
+_trash_node_modules_broken/
 
 # Environment variables
 .env
@@ -48,3 +49,4 @@ Thumbs.db
 
 # Other
 Doc/
+.vercel

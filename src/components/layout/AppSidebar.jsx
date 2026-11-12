@@ -1,8 +1,8 @@
 import { createElement } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext.jsx';
+import { useProject } from '../../context/ProjectContext.jsx';
 import {
-  Bell,
   Briefcase,
   Coins,
   Globe,
@@ -27,9 +27,16 @@ const navigationItems = [
   { id: 'network', label: 'Réseau', icon: Globe, to: '/network' },
 ];
 
+const PHASE_LABELS = {
+  IDEE_VALIDATION: 'Idée · Validation',
+  LANCEMENT: 'Lancement',
+  CROISSANCE: 'Croissance',
+};
+
 export function AppSidebar({ activePage }) {
   const navigate = useNavigate();
   const { logout } = useAuth();
+  const { currentProject } = useProject();
 
   function handleLogout() {
     logout();
@@ -40,7 +47,7 @@ export function AppSidebar({ activePage }) {
     <aside className="w-64 flex-shrink-0 flex-col justify-between hidden lg:flex border-r border-gray-300/70 pr-6">
       <div className="space-y-6">
         <div className="flex items-center gap-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#18181B] text-base font-bold text-white">
+          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-dark text-base font-bold text-white">
             N
           </div>
           <div>
@@ -51,13 +58,19 @@ export function AppSidebar({ activePage }) {
 
         <div className="space-y-1 pt-2">
           <p className="text-[11px] font-medium text-gray-400">Projet actif</p>
-          <h2 className="text-lg font-extrabold leading-tight text-gray-900">MomoFood</h2>
-          <p className="text-xs text-gray-500">Resto-livraison · Lomé</p>
-          <div className="pt-2">
-            <span className="inline-block rounded-full bg-[#E6F4EA] px-3 py-1 text-[11px] font-semibold text-[#005C46]">
-              Phase · Lancement
-            </span>
-          </div>
+          <h2 className="text-lg font-extrabold leading-tight text-gray-900">
+            {currentProject?.name ?? '—'}
+          </h2>
+          <p className="text-xs text-gray-500">
+            {[currentProject?.sector, currentProject?.country].filter(Boolean).join(' · ')}
+          </p>
+          {currentProject && (
+            <div className="pt-2">
+              <span className="inline-block rounded-full bg-primary/10 px-3 py-1 text-[11px] font-semibold text-primary">
+                Phase · {PHASE_LABELS[currentProject.phase] ?? currentProject.phase}
+              </span>
+            </div>
+          )}
         </div>
 
         <nav aria-label="Navigation principale" className="space-y-1 pt-2">
@@ -65,7 +78,7 @@ export function AppSidebar({ activePage }) {
             const isActive = id === activePage;
             const className = `flex items-center gap-3 rounded-full px-4 py-2.5 text-sm transition-colors ${
               isActive
-                ? 'bg-[#18181B] font-semibold text-white'
+                ? 'bg-dark font-semibold text-white'
                 : 'font-medium text-gray-600 hover:bg-black/5'
             }`;
             const contents = (
@@ -75,7 +88,7 @@ export function AppSidebar({ activePage }) {
               </>
             );
 
-            return to ? (
+            return (
               <Link
                 key={id}
                 aria-current={isActive ? 'page' : undefined}
@@ -84,20 +97,16 @@ export function AppSidebar({ activePage }) {
               >
                 {contents}
               </Link>
-            ) : (
-              <a key={label} className={className} href="#">
-                {contents}
-              </a>
             );
           })}
         </nav>
       </div>
 
       <div className="space-y-3">
-        <div className="space-y-3 rounded-2xl bg-[#18181B] p-5 text-white">
+        <div className="space-y-3 rounded-2xl bg-dark p-5 text-white">
           <p className="text-[11px] text-gray-400">Besoin d'un éclairage ?</p>
           <p className="text-sm font-extrabold leading-snug">Demandez à votre copilote.</p>
-          <Button className="flex w-full items-center justify-center gap-2 rounded-xl bg-[#FFB800] py-2.5 text-xs font-bold text-black hover:bg-[#E0A200]">
+          <Button className="flex w-full items-center justify-center gap-2 rounded-xl bg-accent py-2.5 text-xs font-bold text-black hover:bg-accent-hover">
             <MessageCircle size={15} /> Discuter
           </Button>
         </div>
