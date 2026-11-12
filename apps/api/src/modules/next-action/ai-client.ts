@@ -4,6 +4,44 @@ import { GoogleGenerativeAI } from '@google/generative-ai';
 let anthropicClient: Anthropic | null = null;
 let googleClient: GoogleGenerativeAI | null = null;
 
+const RODIUM_DEFAULT_URL = 'https://api.rodiumai.io/v1';
+const RODIUM_DEFAULT_MODEL = 'anthropic/claude-sonnet-5';
+
+interface RodiumResponse {
+  choices?: Array<{ message?: { content?: string } }>;
+}
+
+async function askRodium(prompt: string): Promise<string> {
+  const apiKey = process.env.RODIUM_API_KEY;
+
+  if (!apiKey) {
+    throw new Error('RODIUM_API_KEY absente.');
+  }
+
+  const baseUrl = process.env.RODIUM_API_URL || RODIUM_DEFAULT_URL;
+  const model = process.env.RODIUM_MODEL || RODIUM_DEFAULT_MODEL;
+
+  const response = await fetch(`${baseUrl}/chat/completions`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${apiKey}`,
+    },
+    body: JSON.stringify({
+      model,
+      max_tokens: 300,
+      messages: [{ role: 'user', content: prompt }],
+    }),
+  });
+
+  if (!response.ok) {
+    throw new Error(`Rodium AI a répondu ${response.status} : ${await response.text()}`);
+  }
+
+  const data = (await response.json()) as RodiumResponse;
+  return data.choices?.[0]?.message?.content ?? '';
+}
+
 async function askAnthropic(prompt: string): Promise<string> {
   if (!process.env.ANTHROPIC_API_KEY) {
     throw new Error('ANTHROPIC_API_KEY absente.');
@@ -55,8 +93,18 @@ async function askGoogleWithRetry(prompt: string): Promise<string> {
 /**
  * Renvoie le texte de l'IA, ou null si aucune IA n'est disponible.
  * Le contrôleur décide alors quoi faire (garder le texte existant).
+ * Ordre de priorité : Rodium AI > Anthropic (direct) > Google AI Studio.
  */
 export async function askClaude(prompt: string): Promise<string | null> {
+  try {
+    return await askRodium(prompt);
+  } catch (err) {
+    console.log(
+      'Rodium AI indisponible, bascule sur Anthropic.',
+      err instanceof Error ? err.message : err,
+    );
+  }
+
   try {
     return await askAnthropic(prompt);
   } catch (err) {

@@ -34,11 +34,11 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="flex min-h-screen flex-col bg-[#F7F5F0] font-sans text-[#1D2B27]">
+    <div className="flex min-h-screen flex-col bg-bg-light font-sans text-dark">
       <header className="mx-auto flex w-full max-w-6xl items-center justify-between px-5 py-4 sm:px-8">
         <div className="flex items-center gap-3 sm:gap-5">
           <a aria-label="Nexus Hub, accueil" className="flex items-center gap-2" href="/">
-            <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#17352B] text-sm font-bold text-white">
+            <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-dark text-sm font-bold text-white">
               N
             </span>
             <span className="text-sm font-semibold">Nexus Hub</span>
@@ -47,23 +47,23 @@ export default function LoginPage() {
 
         <p className="text-xs text-gray-600">
           Pas encore de compte?{' '}
-          <Link className="font-semibold text-[#C47B00] hover:underline" to="/register">
+          <Link className="font-semibold text-accent-hover hover:underline" to="/register">
             Créer un compte
           </Link>
         </p>
       </header>
 
       <main className="flex flex-1 items-center justify-center px-4 py-8">
-        <section className="w-full max-w-[388px] rounded-xl border border-[#E9E4DA] bg-white p-6 shadow-[0_8px_20px_rgba(37,37,25,0.08)] sm:p-8">
+        <section className="w-full max-w-[388px] rounded-xl border border-bg-light bg-white p-6 shadow-[0_8px_20px_rgba(37,37,25,0.08)] sm:p-8">
           <div className="mb-5">
-            <span className="inline-flex items-center gap-1.5 rounded-full bg-[#EAF5EE] px-2.5 py-1 text-[10px] font-semibold text-[#278458]">
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-success/10 px-2.5 py-1 text-[10px] font-semibold text-success-hover">
               <Sparkles aria-hidden="true" size={12} />
               Maquette
             </span>
 
             <h1 className="mt-4 text-2xl font-bold leading-tight">Bon retour.</h1>
 
-            <p className="mt-1.5 text-xs leading-relaxed text-[#718078]">
+            <p className="mt-1.5 text-xs leading-relaxed text-gray-500">
               Connectez-vous pour retrouver votre cap, vos tâches et votre budget.
             </p>
           </div>
@@ -81,7 +81,7 @@ export default function LoginPage() {
 
                 <input
                   autoComplete="email"
-                  className="h-11 w-full rounded-xl border border-[#E8E1D5] bg-[#FAF7F1] pl-9 pr-3 text-sm text-gray-800 outline-none transition focus:border-[#005C46] focus:ring-2 focus:ring-[#005C46]/10"
+                  className="h-11 w-full rounded-xl border border-bg-light bg-bg-light pl-9 pr-3 text-sm text-gray-800 outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/10"
                   onChange={(event) => {
                     setEmail(event.target.value);
                     setError('');
@@ -106,7 +106,7 @@ export default function LoginPage() {
 
                 <input
                   autoComplete="current-password"
-                  className="h-11 w-full rounded-xl border border-[#E8E1D5] bg-[#FAF7F1] pl-9 pr-3 text-sm text-gray-800 outline-none transition focus:border-[#005C46] focus:ring-2 focus:ring-[#005C46]/10"
+                  className="h-11 w-full rounded-xl border border-bg-light bg-bg-light pl-9 pr-3 text-sm text-gray-800 outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/10"
                   onChange={(event) => {
                     setPassword(event.target.value);
                     setError('');
@@ -123,14 +123,14 @@ export default function LoginPage() {
               <label className="flex items-center gap-2 text-gray-600">
                 <input
                   checked={rememberMe}
-                  className="h-3.5 w-3.5 accent-[#F5A000]"
+                  className="h-3.5 w-3.5 accent-accent"
                   onChange={(event) => setRememberMe(event.target.checked)}
                   type="checkbox"
                 />
                 Se souvenir de moi
               </label>
 
-              <Link className="text-gray-500 hover:text-[#005C46]" to="/forgot-password">
+              <Link className="text-gray-500 hover:text-primary" to="/forgot-password">
                 Mot de passe oublié ?
               </Link>
             </div>
@@ -142,7 +142,7 @@ export default function LoginPage() {
             )}
 
             <button
-              className="flex h-11 w-full items-center justify-center gap-2 rounded-lg bg-[#F5A000] px-4 text-sm font-medium text-[#14241E] shadow-sm transition-colors hover:bg-[#E39600] disabled:cursor-not-allowed disabled:opacity-60"
+              className="flex h-11 w-full items-center justify-center gap-2 rounded-lg bg-accent px-4 text-sm font-medium text-dark shadow-sm transition-colors hover:bg-accent-hover disabled:cursor-not-allowed disabled:opacity-60"
               disabled={isLoading}
               type="submit"
             >
