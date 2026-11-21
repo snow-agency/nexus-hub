@@ -11,3 +11,15 @@ export const updateTaskStatusSchema = z.object({
     message: 'Le statut doit être A_FAIRE ou FAIT.',
   }),
 });
+
+export const updateTaskSchema = z
+  .object({
+    title: z
+      .string()
+      .min(2, 'Le titre de la tâche doit contenir au moins 2 caractères.')
+      .optional(),
+    dueDate: z.string().datetime().nullable().optional(),
+  })
+  .refine((data) => data.title !== undefined || data.dueDate !== undefined, {
+    message: 'Fournis au moins un champ à modifier : title ou dueDate.',
+  });

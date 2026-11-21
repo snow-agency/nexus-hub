@@ -1,6 +1,6 @@
 import { Response } from 'express';
 import { prisma } from '../../db/prisma.js';
-import { createTaskSchema, updateTaskStatusSchema } from './task.schema.js';
+import { createTaskSchema, updateTaskSchema, updateTaskStatusSchema } from './task.schema.js';
 import { AuthRequest } from '../../middlewares/auth.middleware.js';
 
 export async function createTask(req: AuthRequest, res: Response) {
@@ -76,4 +76,50 @@ export async function updateTaskStatus(req: AuthRequest, res: Response) {
   });
 
   res.json(updated);
+}
+
+export async function updateTask(req: AuthRequest, res: Response) {
+  const result = updateTaskSchema.safeParse(req.body);
+
+  if (!result.success) {
+    return res.status(400).json({ error: result.error.issues[0].message });
+  }
+
+  const { taskId } = req.params;
+
+  const task = await prisma.task.findFirst({
+    where: { id: taskId, project: { userId: req.userId as string } },
+  });
+
+  if (!task) {
+    return res.status(404).json({ error: 'Tâche introuvable.' });
+  }
+
+  const { title, dueDate } = result.data;
+
+  const updated = await prisma.task.update({
+    where: { id: taskId },
+    data: {
+      ...(title !== undefined && { title }),
+      ...(dueDate !== undefined && { dueDate: dueDate === null ? null : new Date(dueDate) }),
+    },
+  });
+
+  res.json(updated);
+}
+
+export async function deleteTask(req: AuthRequest, res: Response) {
+  const { taskId } = req.params;
+
+  const task = await prisma.task.findFirst({
+    where: { id: taskId, project: { userId: req.userId as string } },
+  });
+
+  if (!task) {
+    return res.status(404).json({ error: 'Tâche introuvable.' });
+  }
+
+  await prisma.task.delete({ where: { id: taskId } });
+
+  res.status(204).send();
 }
