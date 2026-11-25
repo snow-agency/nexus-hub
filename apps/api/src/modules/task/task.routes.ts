@@ -1,11 +1,5 @@
 import { Router } from 'express';
-import {
-  createTask,
-  listTasks,
-  updateTaskStatus,
-  updateTask,
-  deleteTask,
-} from './task.controller.js';
+import { createTask, listTasks, updateTaskStatus, updateTaskAssignee } from './task.controller.js';
 import { authMiddleware } from '../../middlewares/auth.middleware.js';
 import { asyncHandler } from '../../middlewares/async-handler.js';
 import { validateUuidParam } from '../../middlewares/validate-uuid.js';
@@ -27,5 +21,12 @@ router.patch(
 );
 router.patch('/:taskId', authMiddleware, validateUuidParam('taskId'), asyncHandler(updateTask));
 router.delete('/:taskId', authMiddleware, validateUuidParam('taskId'), asyncHandler(deleteTask));
+
+router.patch(
+  '/:taskId/assignee',
+  authMiddleware,
+  validateUuidParam('taskId'),
+  asyncHandler(updateTaskAssignee),
+);
 
 export default router;

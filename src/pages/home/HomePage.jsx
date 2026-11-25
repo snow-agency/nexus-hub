@@ -56,23 +56,23 @@ export function HomePage() {
   ];
 
   return (
-    <div className="bg-[#F7F5F0] min-h-screen text-gray-900 font-sans">
+    <div className="bg-bg-light min-h-screen text-gray-900 font-sans">
       {/* Navbar de la page d'accueil */}
       <header className="max-w-7xl mx-auto px-6 py-5 flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-full bg-[#005C46] text-white flex items-center justify-center font-bold text-sm">
+          <div className="w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center font-bold text-sm">
             N
           </div>
           <span className="font-bold text-lg tracking-tight">Nexus Hub</span>
         </div>
         <nav className="hidden md:flex items-center gap-8 text-sm text-gray-700 font-medium">
-          <a href="#fonctionnalites" className="transition-colors hover:text-[#005C46]">
+          <a href="#fonctionnalites" className="transition-colors hover:text-primary">
             Fonctionnalités
           </a>
-          <a href="#services" className="transition-colors hover:text-[#005C46]">
+          <a href="#services" className="transition-colors hover:text-primary">
             Services
           </a>
-          <a href="#reseau" className="transition-colors hover:text-[#005C46]">
+          <a href="#reseau" className="transition-colors hover:text-primary">
             Réseau
           </a>
         </nav>
@@ -82,7 +82,7 @@ export function HomePage() {
           </a>
           <Link
             to="/register"
-            className="rounded-lg bg-[#FFB800] px-5 py-2 text-sm font-semibold text-black transition-colors hover:bg-[#E0A200]"
+            className="rounded-lg bg-accent px-5 py-2 text-sm font-semibold text-black transition-colors hover:bg-accent-hover"
           >
             S'inscrire
           </Link>
@@ -93,14 +93,14 @@ export function HomePage() {
       <section className="max-w-7xl mx-auto px-6 pt-12 pb-20 grid md:grid-cols-2 gap-12 items-center">
         {/* Colonne de gauche: Texte & CTA */}
         <div className="space-y-6">
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-100/70 border border-emerald-200 text-[#005C46] text-xs font-semibold">
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-100/70 border border-emerald-200 text-primary text-xs font-semibold">
             <ShieldCheck size={14} />
             <span>Simplicité & Efficacité</span>
           </div>
 
           <h1 className="text-4xl lg:text-5xl font-extrabold text-gray-900 leading-tight">
-            L'accompagnateur qui dit <span className="text-[#FFB800]">quoi faire</span> et{' '}
-            <span className="text-[#005C46]">pourquoi</span>.
+            L'accompagnateur qui dit <span className="text-accent">quoi faire</span> et{' '}
+            <span className="text-primary">pourquoi</span>.
           </h1>
 
           <p className="text-gray-600 text-base leading-relaxed max-w-lg">
@@ -120,9 +120,9 @@ export function HomePage() {
           {/* Témoignage / Preuve sociale sous le bouton */}
           <div className="flex items-center gap-3 pt-4 text-xs text-gray-600">
             <div className="flex -space-x-2">
-              <div className="w-7 h-7 rounded-full bg-emerald-700 border-2 border-[#F7F5F0]"></div>
-              <div className="w-7 h-7 rounded-full bg-amber-500 border-2 border-[#F7F5F0]"></div>
-              <div className="w-7 h-7 rounded-full bg-slate-800 border-2 border-[#F7F5F0]"></div>
+              <div className="w-7 h-7 rounded-full bg-emerald-700 border-2 border-bg-light"></div>
+              <div className="w-7 h-7 rounded-full bg-amber-500 border-2 border-bg-light"></div>
+              <div className="w-7 h-7 rounded-full bg-slate-800 border-2 border-bg-light"></div>
             </div>
             <span>Rejoint par de nombreux entrepreneurs en Afrique.</span>
           </div>
@@ -156,7 +156,7 @@ export function HomePage() {
 
         <div className="grid gap-6 md:grid-cols-3">
           <Card className="p-6 bg-white border border-gray-100 rounded-2xl shadow-sm hover:shadow-md transition-shadow">
-            <div className="w-10 h-10 rounded-xl bg-emerald-50 text-[#005C46] flex items-center justify-center mb-4">
+            <div className="w-10 h-10 rounded-xl bg-emerald-50 text-primary flex items-center justify-center mb-4">
               <CheckCircle size={20} />
             </div>
             <h3 className="font-bold text-lg mb-2">Un parcours adapté à votre phase</h3>
@@ -167,7 +167,7 @@ export function HomePage() {
           </Card>
 
           <Card className="p-6 bg-white border border-gray-100 rounded-2xl shadow-sm hover:shadow-md transition-shadow">
-            <div className="w-10 h-10 rounded-xl bg-amber-50 text-[#FFB800] flex items-center justify-center mb-4">
+            <div className="w-10 h-10 rounded-xl bg-amber-50 text-accent flex items-center justify-center mb-4">
               <Zap size={20} />
             </div>
             <h3 className="font-bold text-lg mb-2">Une exécution continue</h3>
@@ -177,7 +177,7 @@ export function HomePage() {
           </Card>
 
           <Card className="p-6 bg-white border border-gray-100 rounded-2xl shadow-sm hover:shadow-md transition-shadow">
-            <div className="w-10 h-10 rounded-xl bg-emerald-50 text-[#005C46] flex items-center justify-center mb-4">
+            <div className="w-10 h-10 rounded-xl bg-emerald-50 text-primary flex items-center justify-center mb-4">
               <ShieldCheck size={20} />
             </div>
             <h3 className="font-bold text-lg mb-2">Une seule vision Action</h3>
@@ -192,8 +192,8 @@ export function HomePage() {
         id="services"
         className="mx-auto grid max-w-7xl gap-8 px-6 py-14 md:grid-cols-[0.9fr_1.1fr] md:items-center"
       >
-        <Card className="rounded-xl bg-[#17352B] p-7 text-white shadow-sm md:p-9">
-          <span className="inline-flex rounded-full bg-[#FFB800] px-3 py-1 text-[10px] font-bold uppercase text-[#17352B]">
+        <Card className="rounded-xl bg-dark p-7 text-white shadow-sm md:p-9">
+          <span className="inline-flex rounded-full bg-accent px-3 py-1 text-[10px] font-bold uppercase text-dark">
             Votre prochaine étape
           </span>
           <h2 className="mt-5 max-w-sm text-2xl font-bold leading-tight">
@@ -205,25 +205,25 @@ export function HomePage() {
           </p>
           <ul className="mt-5 space-y-2 text-xs text-white/85">
             <li className="flex items-center gap-2">
-              <CheckCircle size={15} className="text-[#FFB800]" /> Un plan adapté à votre phase
+              <CheckCircle size={15} className="text-accent" /> Un plan adapté à votre phase
             </li>
             <li className="flex items-center gap-2">
-              <CheckCircle size={15} className="text-[#FFB800]" /> Des objectifs concrets à suivre
+              <CheckCircle size={15} className="text-accent" /> Des objectifs concrets à suivre
             </li>
             <li className="flex items-center gap-2">
-              <CheckCircle size={15} className="text-[#FFB800]" /> Les bons conseils au bon moment
+              <CheckCircle size={15} className="text-accent" /> Les bons conseils au bon moment
             </li>
           </ul>
           <a
             href="#fonctionnalites"
-            className="mt-7 inline-flex items-center gap-2 rounded-md bg-[#FFB800] px-5 py-3 text-sm font-semibold text-[#17352B] transition-colors hover:bg-[#E0A200]"
+            className="mt-7 inline-flex items-center gap-2 rounded-md bg-accent px-5 py-3 text-sm font-semibold text-dark transition-colors hover:bg-accent-hover"
           >
             Construire mon plan <ArrowRight size={16} />
           </a>
         </Card>
 
         <div>
-          <span className="text-[10px] font-bold uppercase tracking-wider text-[#005C46]">
+          <span className="text-[10px] font-bold uppercase tracking-wider text-primary">
             Un accompagnement qui avance avec vous
           </span>
           <h2 className="mt-2 text-2xl font-bold leading-tight text-gray-900 md:text-3xl">
@@ -241,7 +241,7 @@ export function HomePage() {
               ['04', 'Vos progrès', 'Des indicateurs faciles à suivre.'],
             ].map(([number, title, description]) => (
               <Card key={number} className="rounded-lg border border-gray-200 bg-white p-4">
-                <span className="text-[10px] font-bold text-[#005C46]">{number}</span>
+                <span className="text-[10px] font-bold text-primary">{number}</span>
                 <h3 className="mt-2 text-sm font-semibold text-gray-900">{title}</h3>
                 <p className="mt-1 text-xs leading-relaxed text-gray-600">{description}</p>
               </Card>
@@ -270,7 +270,7 @@ export function HomePage() {
                 key={title}
                 className="rounded-lg border border-gray-200/80 bg-white p-4 transition-shadow hover:shadow-sm md:p-5"
               >
-                <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-emerald-50 text-[#005C46]">
+                <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-emerald-50 text-primary">
                   {createElement(Icon, { size: 18 })}
                 </span>
                 <h3 className="mt-3 text-sm font-semibold text-gray-900">{title}</h3>
@@ -286,7 +286,7 @@ export function HomePage() {
         className="mx-auto grid max-w-7xl gap-8 px-6 py-14 md:grid-cols-2 md:items-center"
       >
         <div>
-          <span className="text-[10px] font-bold uppercase tracking-wider text-[#005C46]">
+          <span className="text-[10px] font-bold uppercase tracking-wider text-primary">
             Grandir ensemble
           </span>
           <h2 className="mt-2 max-w-md text-2xl font-bold leading-tight text-gray-900 md:text-3xl">
@@ -311,13 +311,13 @@ export function HomePage() {
                   <h3 className="text-sm font-semibold text-gray-900">{name}</h3>
                   <p className="text-xs text-gray-600">{role}</p>
                 </div>
-                <ArrowRight className="ml-auto text-[#005C46]" size={16} />
+                <ArrowRight className="ml-auto text-primary" size={16} />
               </Card>
             ))}
           </div>
         </div>
         <Card className="rounded-xl border border-gray-200 bg-white p-6 md:p-8">
-          <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-amber-50 text-[#A56C00]">
+          <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-amber-50 text-accent-hover">
             <Handshake size={20} />
           </span>
           <h3 className="mt-5 text-xl font-bold text-gray-900">
@@ -335,21 +335,21 @@ export function HomePage() {
         </Card>
       </section>
 
-      <section id="inscription" className="bg-[#17352B] px-6 py-10 text-center text-white">
+      <section id="inscription" className="bg-dark px-6 py-10 text-center text-white">
         <h2 className="text-xl font-bold md:text-2xl">Prêt à donner un cap à votre projet ?</h2>
         <p className="mx-auto mt-2 max-w-lg text-sm text-white/75">
           Faites le premier pas et donnez à vos ambitions un plan pour avancer.
         </p>
         <a
           href="#fonctionnalites"
-          className="mt-5 inline-flex items-center gap-2 rounded-md bg-[#FFB800] px-5 py-2.5 text-sm font-semibold text-[#17352B] transition-colors hover:bg-[#E0A200]"
+          className="mt-5 inline-flex items-center gap-2 rounded-md bg-accent px-5 py-2.5 text-sm font-semibold text-dark transition-colors hover:bg-accent-hover"
         >
           C’est parti <ArrowRight size={15} />
         </a>
       </section>
 
       <footer className="mx-auto flex max-w-7xl flex-col gap-2 px-6 py-5 text-xs text-gray-500 sm:flex-row sm:items-center sm:justify-between">
-        <span className="font-semibold text-[#005C46]">Nexus Hub</span>
+        <span className="font-semibold text-primary">Nexus Hub</span>
         <span>Un cap clair pour faire grandir votre projet.</span>
       </footer>
     </div>

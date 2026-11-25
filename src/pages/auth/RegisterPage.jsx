@@ -40,10 +40,10 @@ export default function RegisterPage() {
   }
 
   return (
-    <div className="flex min-h-screen flex-col bg-[#F7F5F0] font-sans text-[#1D2B27]">
+    <div className="flex min-h-screen flex-col bg-bg-light font-sans text-dark">
       <header className="mx-auto flex w-full max-w-6xl items-center justify-between px-5 py-4 sm:px-8">
         <Link aria-label="Nexus Hub, accueil" className="flex items-center gap-2" to="/">
-          <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#17352B] text-sm font-bold text-white">
+          <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-dark text-sm font-bold text-white">
             N
           </span>
           <span className="text-sm font-semibold">Nexus Hub</span>
@@ -51,31 +51,31 @@ export default function RegisterPage() {
 
         <p className="text-xs text-gray-600">
           Déjà un compte?{' '}
-          <Link className="font-semibold text-[#C47B00] hover:underline" to="/auth">
+          <Link className="font-semibold text-accent-hover hover:underline" to="/auth">
             Se connecter
           </Link>
         </p>
       </header>
 
       <main className="flex flex-1 items-center justify-center px-4 py-8">
-        <section className="w-full max-w-[420px] rounded-xl border border-[#E9E4DA] bg-white p-6 shadow-[0_8px_20px_rgba(37,37,25,0.08)] sm:p-8">
+        <section className="w-full max-w-[420px] rounded-xl border border-bg-light bg-white p-6 shadow-[0_8px_20px_rgba(37,37,25,0.08)] sm:p-8">
           <div className="mb-5">
             <Link
-              className="inline-flex items-center gap-1 text-xs text-gray-600 transition-colors hover:text-[#005C46]"
+              className="inline-flex items-center gap-1 text-xs text-gray-600 transition-colors hover:text-primary"
               to="/"
             >
               <ArrowLeft aria-hidden="true" size={14} />
               Retour à l’accueil
             </Link>
 
-            <span className="mt-5 inline-flex items-center gap-1.5 rounded-full bg-[#EAF5EE] px-2.5 py-1 text-[10px] font-semibold text-[#278458]">
+            <span className="mt-5 inline-flex items-center gap-1.5 rounded-full bg-success/10 px-2.5 py-1 text-[10px] font-semibold text-success-hover">
               <Sparkles aria-hidden="true" size={12} />
               Créer votre espace
             </span>
 
             <h1 className="mt-3 text-2xl font-bold leading-tight">Votre projet commence ici.</h1>
 
-            <p className="mt-1.5 text-xs leading-relaxed text-[#718078]">
+            <p className="mt-1.5 text-xs leading-relaxed text-gray-500">
               Créez votre compte pour organiser vos priorités et faire avancer votre projet.
             </p>
           </div>
@@ -93,7 +93,7 @@ export default function RegisterPage() {
 
                 <input
                   autoComplete="name"
-                  className="h-11 w-full rounded-xl border border-[#E8E1D5] bg-[#FAF7F1] pl-9 pr-3 text-sm text-gray-800 outline-none transition focus:border-[#005C46] focus:ring-2 focus:ring-[#005C46]/10"
+                  className="h-11 w-full rounded-xl border border-bg-light bg-bg-light pl-9 pr-3 text-sm text-gray-800 outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/10"
                   minLength={2}
                   onChange={(event) => {
                     setName(event.target.value);
@@ -119,7 +119,7 @@ export default function RegisterPage() {
 
                 <input
                   autoComplete="email"
-                  className="h-11 w-full rounded-xl border border-[#E8E1D5] bg-[#FAF7F1] pl-9 pr-3 text-sm text-gray-800 outline-none transition focus:border-[#005C46] focus:ring-2 focus:ring-[#005C46]/10"
+                  className="h-11 w-full rounded-xl border border-bg-light bg-bg-light pl-9 pr-3 text-sm text-gray-800 outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/10"
                   onChange={(event) => {
                     setEmail(event.target.value);
                     setError('');
@@ -144,7 +144,7 @@ export default function RegisterPage() {
 
                 <input
                   autoComplete="new-password"
-                  className="h-11 w-full rounded-xl border border-[#E8E1D5] bg-[#FAF7F1] pl-9 pr-3 text-sm text-gray-800 outline-none transition focus:border-[#005C46] focus:ring-2 focus:ring-[#005C46]/10"
+                  className="h-11 w-full rounded-xl border border-bg-light bg-bg-light pl-9 pr-3 text-sm text-gray-800 outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/10"
                   minLength={8}
                   onChange={(event) => {
                     setPassword(event.target.value);
@@ -170,7 +170,7 @@ export default function RegisterPage() {
 
                 <input
                   autoComplete="new-password"
-                  className="h-11 w-full rounded-xl border border-[#E8E1D5] bg-[#FAF7F1] pl-9 pr-3 text-sm text-gray-800 outline-none transition focus:border-[#005C46] focus:ring-2 focus:ring-[#005C46]/10"
+                  className="h-11 w-full rounded-xl border border-bg-light bg-bg-light pl-9 pr-3 text-sm text-gray-800 outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/10"
                   onChange={(event) => {
                     setPasswordConfirmation(event.target.value);
                     setError('');
@@ -190,7 +190,7 @@ export default function RegisterPage() {
             )}
 
             <button
-              className="flex h-11 w-full items-center justify-center gap-2 rounded-lg bg-[#F5A000] px-4 text-sm font-medium text-[#14241E] shadow-sm transition-colors hover:bg-[#E39600] disabled:cursor-not-allowed disabled:opacity-60"
+              className="flex h-11 w-full items-center justify-center gap-2 rounded-lg bg-accent px-4 text-sm font-medium text-dark shadow-sm transition-colors hover:bg-accent-hover disabled:cursor-not-allowed disabled:opacity-60"
               disabled={isLoading}
               type="submit"
             >

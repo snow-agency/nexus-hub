@@ -56,10 +56,18 @@ model Project {
   createdAt   DateTime      @default(now()) @map("created_at")
   updatedAt   DateTime      @updatedAt @map("updated_at")
 
-  tasks        Task[]
-  transactions Transaction[]
-  signals      Signal[]
-  nextActions  NextAction[]
+  tasks         Task[]
+  transactions  Transaction[]
+  signals       Signal[]
+  nextActions   NextAction[]
+  strategyItems StrategyItem[]
+  teamMembers   TeamMember[]
+  contacts      Contact[]
+  opportunities Opportunity[]
+  goals         Goal[]
+  bmcBlocks     BmcBlock[]
+  proposals     Proposal[]
+  chatMessages  ChatMessage[]
 
   @@map("projects")
 }
@@ -80,6 +88,9 @@ model Task {
   title     String
   status    TaskStatus @default(A_FAIRE)
   dueDate   DateTime?  @map("due_date")
+
+  assigneeId String?     @map("assignee_id")
+  assignee   TeamMember? @relation(fields: [assigneeId], references: [id], onDelete: SetNull)
 
   createdAt DateTime   @default(now()) @map("created_at")
 
@@ -188,4 +199,213 @@ model NextAction {
   createdAt DateTime          @default(now()) @map("created_at")
 
   @@map("next_actions")
+}
+// ---------------------------------------------------------------------------
+// V1.5 : stratégie, équipe, réseau, performance, Business Model Canvas
+// ---------------------------------------------------------------------------
+enum StrategyItemKind {
+  ETAPE_MARCHE
+  POSITIONNEMENT
+  SECTION_PLAN
+}
+
+model StrategyItem {
+  id        String           @id @default(uuid())
+  projectId String           @map("project_id")
+  project   Project          @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  kind      StrategyItemKind
+  title     String
+  content   String?
+  progress  Int              @default(0)
+  done      Boolean          @default(false)
+  position  Int              @default(0)
+
+  createdAt DateTime         @default(now()) @map("created_at")
+  updatedAt DateTime         @updatedAt @map("updated_at")
+
+  @@index([projectId, kind])
+  @@map("strategy_items")
+}
+
+model TeamMember {
+  id        String   @id @default(uuid())
+  projectId String   @map("project_id")
+  project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  name      String
+  role      String
+  email     String?
+
+  tasks     Task[]
+
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@index([projectId])
+  @@map("team_members")
+}
+
+enum ContactType {
+  MENTOR
+  PARTENAIRE
+  INVESTISSEUR
+  CLIENT
+  FOURNISSEUR
+  AUTRE
+}
+
+model Contact {
+  id           String      @id @default(uuid())
+  projectId    String      @map("project_id")
+  project      Project     @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  name         String
+  organization String?
+  type         ContactType @default(AUTRE)
+  email        String?
+  phone        String?
+  notes        String?
+
+  createdAt    DateTime    @default(now()) @map("created_at")
+
+  @@index([projectId])
+  @@map("contacts")
+}
+
+enum OpportunityKind {
+  FINANCEMENT
+  INCUBATION
+  FORMATION
+  EVENEMENT
+  AUTRE
+}
+
+enum OpportunityStatus {
+  A_EXPLORER
+  EN_COURS
+  OBTENUE
+  ECARTEE
+}
+
+model Opportunity {
+  id          String            @id @default(uuid())
+  projectId   String            @map("project_id")
+  project     Project           @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  title       String
+  description String?
+  kind        OpportunityKind   @default(AUTRE)
+  status      OpportunityStatus @default(A_EXPLORER)
+  deadline    DateTime?
+  url         String?
+  aiSuggested Boolean           @default(false) @map("ai_suggested")
+
+  createdAt   DateTime          @default(now()) @map("created_at")
+
+  @@index([projectId])
+  @@map("opportunities")
+}
+
+model Goal {
+  id        String    @id @default(uuid())
+  projectId String    @map("project_id")
+  project   Project   @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  title     String
+  target    Float
+  current   Float     @default(0)
+  unit      String?
+  deadline  DateTime?
+
+  createdAt DateTime  @default(now()) @map("created_at")
+
+  @@index([projectId])
+  @@map("goals")
+}
+
+enum BmcBlockType {
+  PROPOSITION_VALEUR
+  SEGMENTS_CLIENTS
+  CANAUX
+  RELATIONS_CLIENTS
+  REVENUS
+  RESSOURCES_CLES
+  ACTIVITES_CLES
+  PARTENAIRES
+  STRUCTURE_COUTS
+}
+
+model BmcBlock {
+  id        String       @id @default(uuid())
+  projectId String       @map("project_id")
+  project   Project      @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  block     BmcBlockType
+  content   String
+
+  updatedAt DateTime     @updatedAt @map("updated_at")
+
+  @@unique([projectId, block])
+  @@map("bmc_blocks")
+}
+
+// ---------------------------------------------------------------------------
+// Agent IA : propositions automatiques et conversation
+// ---------------------------------------------------------------------------
+enum ProposalType {
+  TACHE
+  ETAPE_STRATEGIE
+  POSITIONNEMENT
+  OBJECTIF
+  OPPORTUNITE
+  BLOC_BMC
+}
+
+enum ProposalStatus {
+  PROPOSEE
+  ACCEPTEE
+  REFUSEE
+}
+
+enum ProposalSource {
+  AUTO
+  CHAT
+}
+
+model Proposal {
+  id        String         @id @default(uuid())
+  projectId String         @map("project_id")
+  project   Project        @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  type      ProposalType
+  title     String
+  reason    String
+  payload   Json
+  status    ProposalStatus @default(PROPOSEE)
+  source    ProposalSource @default(AUTO)
+
+  createdAt DateTime       @default(now()) @map("created_at")
+  decidedAt DateTime?      @map("decided_at")
+
+  @@index([projectId, status])
+  @@map("proposals")
+}
+
+enum ChatRole {
+  USER
+  ASSISTANT
+}
+
+model ChatMessage {
+  id        String   @id @default(uuid())
+  projectId String   @map("project_id")
+  project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  role      ChatRole
+  content   String
+
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@index([projectId, createdAt])
+  @@map("chat_messages")
 }

@@ -21,7 +21,7 @@ export function Input({ label, leadingIcon: LeadingIcon, id, className = '', ...
         )}
         <input
           id={inputId}
-          className={`h-11 w-full rounded-xl border border-[#E8E1D5] bg-[#FAF7F1] px-3 text-sm text-gray-800 outline-none transition focus:border-[#005C46] focus:ring-2 focus:ring-[#005C46]/10 ${LeadingIcon ? 'pl-9' : ''} ${className}`}
+          className={`h-11 w-full rounded-xl border border-bg-light bg-bg-light px-3 text-sm text-gray-800 outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/10 ${LeadingIcon ? 'pl-9' : ''} ${className}`}
           {...props}
         />
       </div>
