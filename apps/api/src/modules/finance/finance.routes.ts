@@ -1,5 +1,10 @@
 import { Router } from 'express';
-import { createTransaction, listTransactions, listCategories } from './finance.controller.js';
+import {
+  createTransaction,
+  listTransactions,
+  listCategories,
+  deleteTransaction,
+} from './finance.controller.js';
 import { authMiddleware } from '../../middlewares/auth.middleware.js';
 import { asyncHandler } from '../../middlewares/async-handler.js';
 import { validateUuidParam } from '../../middlewares/validate-uuid.js';
@@ -13,6 +18,12 @@ router.get(
   authMiddleware,
   validateUuidParam('projectId'),
   asyncHandler(listTransactions),
+);
+router.delete(
+  '/:transactionId',
+  authMiddleware,
+  validateUuidParam('transactionId'),
+  asyncHandler(deleteTransaction),
 );
 
 export default router;

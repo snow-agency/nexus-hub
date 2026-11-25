@@ -13,7 +13,14 @@ router.get(
   validateUuidParam('projectId'),
   asyncHandler(listTasks),
 );
-router.patch('/:taskId/status', authMiddleware, asyncHandler(updateTaskStatus));
+router.patch(
+  '/:taskId/status',
+  authMiddleware,
+  validateUuidParam('taskId'),
+  asyncHandler(updateTaskStatus),
+);
+router.patch('/:taskId', authMiddleware, validateUuidParam('taskId'), asyncHandler(updateTask));
+router.delete('/:taskId', authMiddleware, validateUuidParam('taskId'), asyncHandler(deleteTask));
 
 router.patch(
   '/:taskId/assignee',

@@ -60,3 +60,19 @@ export async function listTransactions(req: AuthRequest, res: Response) {
 export async function listCategories(_req: AuthRequest, res: Response) {
   res.json({ categories: TRANSACTION_CATEGORIES });
 }
+
+export async function deleteTransaction(req: AuthRequest, res: Response) {
+  const { transactionId } = req.params;
+
+  const transaction = await prisma.transaction.findFirst({
+    where: { id: transactionId, project: { userId: req.userId as string } },
+  });
+
+  if (!transaction) {
+    return res.status(404).json({ error: 'Transaction introuvable.' });
+  }
+
+  await prisma.transaction.delete({ where: { id: transactionId } });
+
+  res.status(204).send();
+}
